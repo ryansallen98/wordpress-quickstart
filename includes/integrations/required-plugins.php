@@ -6,7 +6,7 @@ if (!defined("ABSPATH")) {
 }
 
 require_once get_template_directory() .
-    "/inc/integrations/class-tgm-plugin-activation.php";
+    "/includes/integrations/class-tgm-plugin-activation.php";
 
 add_action("tgmpa_register", "theme_name_register_required_plugins");
 
