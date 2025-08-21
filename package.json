@@ -1,6 +1,14 @@
 {
+  "scripts": {
+    "ts:build": "tailwindcss build -i ./assets/styles/main.css -o ./assets/build/main.css --minify",
+    "ts:watch": "tailwindcss -i ./assets/styles/main.css -o ./assets/build/main.css --watch"
+  },
   "devDependencies": {
     "@zackad/prettier-plugin-twig": "^0.16.0",
     "prettier-plugin-tailwindcss": "^0.6.14"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "tailwindcss": "^4.1.12"
   }
 }
