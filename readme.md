@@ -1,7 +1,5 @@
 # Wordpress Theme Quickstart
 
-**A WordPress quickstart theme.**
-
 It leverages Timber/Twig for template management, HTMX and Alpine.js for interactivity, and Tailwind CSS for styling.
 The theme is designed to be lightweight, fast, and extendable.
 
