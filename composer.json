@@ -1,5 +1,6 @@
 {
     "require": {
-        "timber/timber": "^2.3"
+        "timber/timber": "^2.3",
+        "components/font-awesome": "^6.5"
     }
 }
