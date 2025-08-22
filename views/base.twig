@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+      <title>
+        {{ site.title }}
+      </title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <main>
+      {% block content %}
+
+      {% endblock %}
+    </main>
+
+    <footer>
+      {% block footer %}
+        <p>
+          Brought to you with ❤ by the Timber.
+        </p>
+      {% endblock %}
+    </footer>
+  </body>
+</html>
