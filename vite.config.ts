@@ -20,6 +20,7 @@ export default defineConfig(({ command, mode }) => {
       rollupOptions: {
         input: {
           index: "assets/ts/index.ts",
+          debug: "assets/ts/debug.ts",
         },
         output: {
           entryFileNames: "js/[name]-[hash].js",
