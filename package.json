@@ -1,15 +1,22 @@
 {
+  "name": "oceanic-fuel",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "ts:build": "tailwindcss build -i ./assets/styles/main.css -o ./assets/build/main.css --minify",
-    "ts:watch": "tailwindcss -i ./assets/styles/main.css -o ./assets/build/main.css --watch"
+    "dev": "tsc && vite build --watch --mode development",
+    "build": "tsc && vite build"
   },
   "devDependencies": {
+    "@types/css-modules": "^1.0.5",
     "@zackad/prettier-plugin-twig": "^0.16.0",
-    "prettier-plugin-tailwindcss": "^0.6.14"
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.2"
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.12",
     "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.12",
     "tailwindcss": "^4.1.12"
   }
 }
