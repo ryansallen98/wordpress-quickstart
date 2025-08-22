@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+/* Alpine JS */
+[x-cloak] {
+  display: none !important;
+}
