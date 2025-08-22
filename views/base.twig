@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html {{ site.language_attributes }}>
   <head>
+    <meta charset="{{ site.charset }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% block head %}
-      <title>
-        {{ site.title }}
-      </title>
+
     {% endblock %}
+    {{ function('wp_head') }}
   </head>
 
   <body>
@@ -17,9 +18,7 @@
 
     <footer>
       {% block footer %}
-        <p>
-          Brought to you with ❤ by the Timber.
-        </p>
+
       {% endblock %}
     </footer>
   </body>
