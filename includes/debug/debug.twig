@@ -1,172 +1,89 @@
+{% set debug = {
+  post: post,
+  acf: acf,
+  meta: post.meta,
+  site: site,
+  user: user,
+  request: request,
+  context: _context
+} %}
+
+{% set keys = debug|keys %}
+{% set initial = keys|first %}
+
+<!-- prettier-ignore-start -->
+<script {{ csp_nonce_attr|default('') }}>
+  window.AlpineData?.("debugPanel", () => ({
+    open: JSON.parse(localStorage.getItem('debug-open') ?? 'false'),
+    active: localStorage.getItem('debug-active') ?? '{{ initial|e('js') }}',
+    toggleOpen() {
+      this.open = !this.open;
+      localStorage.setItem('debug-open', JSON.stringify(this.open));
+    },
+    setActive(tab) {
+      this.active = tab;
+      localStorage.setItem('debug-active', tab);
+    },
+    init() {
+      this.$watch('open', v => localStorage.setItem('debug-open', JSON.stringify(v)));
+      this.$watch('active', v => localStorage.setItem('debug-active', v));
+    }
+  }));
+</script>
+<!-- prettier-ignore-end -->
+
 <div
-  :class="open ? 'fixed bottom-4 left-4 w-2xl max-w-2xl overflow-hidden rounded-md bg-neutral-900' : 'fixed bottom-4 left-4 rounded-md bg-neutral-900 overflow-hidden'"
-  x-data="{
-    open: true,
-  }"
+  x-data="debugPanel()"
+  class="fixed bottom-4 left-4 overflow-hidden rounded-md bg-neutral-900"
+  :class="open ? 'w-2xl max-w-2xl' : ''"
 >
+  <!-- Accordion button -->
   <button
-    :class="open ? 'flex w-full cursor-pointer flex-row items-center justify-between gap-1 rounded-md bg-neutral-900 p-2 px-4 text-white hover:bg-neutral-800/50' : 'p-2 aspect-square cursor-pointer flex-row items-center justify-between text-white hover:bg-neutral-800/50'"
-    @click="open = !open"
+    class="flex cursor-pointer flex-row items-center justify-between gap-1 rounded-md bg-neutral-900 p-2 text-white hover:bg-neutral-800/50"
+    :class="open ? 'w-full px-4' : 'aspect-square'"
+    @click="toggleOpen"
     type="button"
   >
     <div class="flex items-center gap-2">
       <i class="fa-solid fa-bug-slash"></i>
       <span :class="open ? '' : 'sr-only'">Debug</span>
     </div>
-
-    <!-- change icon when open/closed -->
     <i :class="open ? 'fa-solid fa-minus' : 'sr-only'"></i>
   </button>
 
-  <div
-    x-show="open"
-    x-collapse
-    x-data="{
-      tab: 0,
-      tabs: ['post', 'site', 'context', 'user', 'request'],
-      select(i) {
-        this.tab = i;
-        this.$refs.panels.children[i].focus();
-      }
-    }"
-    class="p-2 pt-4"
-  >
+  <div class="p-2 pt-4" :class="open ? '' : 'hidden'">
     <!-- Tab list -->
     <nav class="mx-4 flex flex-row" role="tablist" aria-label="Debug tabs">
-      <template x-for="(label, i) in tabs" :key="i">
+      {% for key, item in debug %}
         <button
           class="cursor-pointer rounded-t-md p-1 px-3 text-sm font-medium text-white uppercase hover:bg-neutral-800/50 aria-selected:bg-neutral-800"
           role="tab"
-          :id="`tab-${i}`"
-          :aria-controls="`panel-${i}`"
-          :aria-selected="tab === i"
-          :tabindex="tab === i ? 0 : -1"
-          @click="tab = i"
-          @keydown.arrow-right.prevent="select((i+1) % tabs.length)"
-          @keydown.arrow-left.prevent="select((i-1+tabs.length) % tabs.length)"
-          x-text="label"
+          :aria-selected="active === '{{ key }}'"
+          :tabindex="active === '{{ key }}' ? 0 : -1"
+          aria-controls="panel-{{ key }}"
+          id="tab-{{ key }}"
+          @click="setActive('{{ key }}')"
         >
-
+          {{ key }}
         </button>
-      </template>
+      {% endfor %}
     </nav>
 
     <!-- Tab panels -->
-    <div x-ref="panels">
-      <template x-if="tab === 0">
+    <div>
+      {% for key, item in debug %}
         <div
-          x-cloak
-          x-transition:enter.opacity.duration.150ms
           role="tabpanel"
-          id="panel-0"
-          tabindex="0"
-          x-init="$nextTick(() => Prism.highlightElement($el.querySelector('code')))"
+          aria-labelledby="tab-{{ key }}"
+          id="panel-{{ key }}"
+          x-show="active === '{{ key }}'"
+          x-cloak
         >
           <!-- prettier-ignore-start -->
-          <pre
-            class="m-0! max-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"
-          ><code
-              class="language-json"
-              x-ref="code"
-              x-text="JSON.stringify({{ post
-                |json_encode(constant('JSON_PRETTY_PRINT'))
-                |e('html') }}, null, 2)"
-            ></code></pre>
-            <!-- prettier-ignore-end -->
+          <pre class="m-0! max-h-120 min-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"><code class="language-json">{{ item|json_encode(constant('JSON_PRETTY_PRINT'))|e('html') }}</code></pre>
+          <!-- prettier-ignore-end -->
         </div>
-      </template>
-
-      <template x-if="tab === 1">
-        <div
-          x-cloak
-          x-transition:enter.opacity.duration.150ms
-          role="tabpanel"
-          id="panel-1"
-          tabindex="1"
-          x-init="$nextTick(() => Prism.highlightElement($el.querySelector('code')))"
-        >
-          <!-- prettier-ignore-start -->
-          <pre
-            class="m-0! max-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"
-          ><code
-              class="language-json"
-              x-ref="code"
-              x-text="JSON.stringify({{ site
-                |json_encode(constant('JSON_PRETTY_PRINT'))
-                |e('html') }}, null, 2)"
-            ></code></pre>
-            <!-- prettier-ignore-end -->
-        </div>
-      </template>
-
-      <template x-if="tab === 2">
-        <div
-          x-cloak
-          x-transition:enter.opacity.duration.150ms
-          role="tabpanel"
-          id="panel-2"
-          tabindex="2"
-          x-init="$nextTick(() => Prism.highlightElement($el.querySelector('code')))"
-        >
-          <!-- prettier-ignore-start -->
-          <pre
-            class="m-0! max-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"
-          ><code
-              class="language-json"
-              x-ref="code"
-              x-text="JSON.stringify({{ _context
-                |json_encode(constant('JSON_PRETTY_PRINT'))
-                |e('html') }}, null, 2)"
-            ></code></pre>
-            <!-- prettier-ignore-end -->
-        </div>
-      </template>
-
-      <template x-if="tab === 3">
-        <div
-          x-cloak
-          x-transition:enter.opacity.duration.150ms
-          role="tabpanel"
-          id="panel-3"
-          tabindex="3"
-          x-init="$nextTick(() => Prism.highlightElement($el.querySelector('code')))"
-        >
-          <!-- prettier-ignore-start -->
-          <pre
-            class="m-0! max-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"
-          ><code
-              class="language-json"
-              x-ref="code"
-              x-text="JSON.stringify({{ user
-                |json_encode(constant('JSON_PRETTY_PRINT'))
-                |e('html') }}, null, 2)"
-            ></code></pre>
-            <!-- prettier-ignore-end -->
-        </div>
-      </template>
-
-      <template x-if="tab === 4">
-        <div
-          x-cloak
-          x-transition:enter.opacity.duration.150ms
-          role="tabpanel"
-          id="panel-4"
-          tabindex="4"
-          x-init="$nextTick(() => Prism.highlightElement($el.querySelector('code')))"
-        >
-          <!-- prettier-ignore-start -->
-          <pre
-            class="m-0! max-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"
-          ><code
-              class="language-json"
-              x-ref="code"
-              x-text="JSON.stringify({{ request
-                |json_encode(constant('JSON_PRETTY_PRINT'))
-                |e('html') }}, null, 2)"
-            ></code></pre>
-            <!-- prettier-ignore-end -->
-        </div>
-      </template>
+      {% endfor %}
     </div>
   </div>
 </div>
