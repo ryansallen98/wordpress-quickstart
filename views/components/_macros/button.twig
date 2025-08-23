@@ -1,4 +1,3 @@
-{# components/_macros/button.twig #}
 {% macro button(opts = {}) %}
     {# Defaults #}
     {% set label     = opts.label     | default('Button') %}
@@ -51,6 +50,13 @@
             rel: rel ? rel : 'noopener noreferrer'
         }) %}
     {% endif %}
+    
+    {% set content %}
+        {% if prefix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ prefix|raw }}</span>{% endif %}
+        <span>{{ label }}</span>
+        {% if suffix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ suffix|raw }}</span>{% endif %}
+    {% endset %}
+
 
     {# Render anchor vs button #}
     {% if href %}
@@ -60,9 +66,7 @@
            {% for k, v in computed_attrs %}
              {% if v is not null %} {{ k }}="{{ v }}"{% endif %}
            {% endfor %}>
-            {% if prefix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ prefix|raw }}</span>{% endif %}
-            <span>{{ label }}</span>
-            {% if suffix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ suffix|raw }}</span>{% endif %}
+            {{ content|raw }}
         </a>
     {% else %}
         <button
@@ -71,9 +75,7 @@
             {% for k, v in computed_attrs %}
               {% if v is not null %} {{ k }}="{{ v }}"{% endif %}
             {% endfor %}>
-            {% if prefix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ prefix|raw }}</span>{% endif %}
-            <span>{{ label }}</span>
-            {% if suffix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ suffix|raw }}</span>{% endif %}
+            {{ content|raw }}
         </button>
     {% endif %}
 {% endmacro %}
