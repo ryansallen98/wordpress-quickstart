@@ -35,7 +35,7 @@ function theme_enqueue_prism_assets()
     if (!empty($item['css'])) {
         foreach ($item['css'] as $i => $cssFile) {
             wp_enqueue_style(
-                "debug-css-{$i}",
+                "debug-{$i}",
                 $dist_uri . '/' . $cssFile,
                 [],
                 null
@@ -46,7 +46,7 @@ function theme_enqueue_prism_assets()
     // Enqueue main JS
     if (!empty($item['file'])) {
         wp_enqueue_script(
-            'debug-js',
+            'debug',
             $dist_uri . '/' . $item['file'],
             [],
             null,
@@ -65,6 +65,9 @@ add_action('wp_footer', function () {
         return;
 
     // render debug widget
-    $context = Timber::context();
+    $context = Timber::context(); // Get the Timber context
+    $context['acf'] = function_exists('get_fields') ? get_fields(get_the_ID()) : []; // Get ACF fields
+    $context['acf_options'] = function_exists('get_fields') ? get_fields('option') : []; // Get ACF options
+
     Timber::render(__DIR__ . '/debug.twig', $context);
 }, 100);
