@@ -1,6 +1,7 @@
 {
     "require": {
         "timber/timber": "^2.3",
-        "components/font-awesome": "^6.5"
+        "components/font-awesome": "^6.5",
+        "gehrisandro/tailwind-merge-php": "^1.1"
     }
 }
