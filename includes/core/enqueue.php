@@ -29,7 +29,7 @@ function theme_enqueue_vite_assets()
     if (!empty($item['css'])) {
         foreach ($item['css'] as $i => $cssFile) {
             wp_enqueue_style(
-                "theme-css-{$i}",
+                "theme-{$i}",
                 $dist_uri . '/' . $cssFile,
                 [],
                 null
@@ -40,7 +40,7 @@ function theme_enqueue_vite_assets()
     // Enqueue main JS
     if (!empty($item['file'])) {
         wp_enqueue_script(
-            'theme-js',
+            'theme',
             $dist_uri . '/' . $item['file'],
             [],
             null,
