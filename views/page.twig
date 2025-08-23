@@ -1,5 +1,5 @@
 {% extends 'base.twig' %}
-{% from 'components/_macros/button.twig' import button %}
+{% from 'components/button.twig' import button %}
 
 {% block content %}
   <div class="flex flex-col gap-4 p-16">
@@ -115,9 +115,17 @@
         button({
           label: 'Click Me',
           size: 'lg',
-          variant: 'destructive'
+          variant: 'destructive',
+          suffix: '<i class="fa-solid fa-thumbs-up"></i>'
         })
       }}
-    </div>this is the page
+      {{
+        button({
+          label: '<i class="fa-solid fa-image"></i>',
+          size: 'icon',
+          variant: 'primary'
+        })
+      }}
+    </div>
   </div>
 {% endblock %}
