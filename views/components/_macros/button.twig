@@ -1,0 +1,79 @@
+{# components/_macros/button.twig #}
+{% macro button(opts = {}) %}
+    {# Defaults #}
+    {% set label     = opts.label     | default('Button') %}
+    {% set href      = opts.href      | default(null) %}
+    {% set type      = opts.type      | default('button') %}
+    {% set variant   = opts.variant   | default('primary') %}
+    {% set size      = opts.size      | default('md') %}
+    {% set block     = opts.block     | default(false) %}
+    {% set disabled  = opts.disabled  | default(false) %}
+    {% set loading   = opts.loading   | default(false) %}
+    {% set target    = opts.target    | default(null) %}
+    {% set rel       = opts.rel       | default(null) %}
+    {% set prefix    = opts.prefix    | default(null) %}
+    {% set suffix    = opts.suffix    | default(null) %}
+    {% set classes   = opts.class     | default('') %}
+    {% set attrs     = opts.attributes| default({}) %}
+
+    {# Tailwind class maps #}
+    {% set base = 'cursor-pointer inline-flex items-center justify-center gap-2 rounded font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none' %}
+
+    {% set variants = {
+        primary:     'bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-600',
+        secondary:   'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus-visible:ring-neutral-400',
+        ghost:       'bg-transparent text-neutral-900 hover:bg-neutral-100 focus-visible:ring-neutral-400',
+        link:        'bg-transparent text-blue-700 underline underline-offset-4 hover:no-underline focus-visible:ring-blue-600',
+        destructive: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600'
+    } %}
+
+    {% set sizes = {
+        xs:   'text-xs px-2 py-1',
+        sm:   'text-sm px-3 py-1.5',
+        md:   'text-sm px-4 py-2',
+        lg:   'text-base px-5 py-2.5',
+        xl:   'text-base px-6 py-3',
+        icon: 'p-2'
+    } %}
+
+    {% set width = block ? 'w-full' : '' %}
+    {% set composed = twmerge(base ~ ' ' ~ (variants[variant]|default(variants.primary)) ~ ' ' ~ (sizes[size]|default(sizes.md)) ~ ' ' ~ width ~ ' ' ~ classes)|trim %}
+
+    {# Build attributes #}
+    {% set computed_attrs = attrs|merge({
+        class: composed,
+        'aria-disabled': disabled ? 'true' : null,
+        'data-loading': loading ? 'true' : null
+    }) %}
+
+    {% if target == '_blank' %}
+        {% set computed_attrs = computed_attrs|merge({
+            rel: rel ? rel : 'noopener noreferrer'
+        }) %}
+    {% endif %}
+
+    {# Render anchor vs button #}
+    {% if href %}
+        <a href="{{ href }}"
+           {% if target %}target="{{ target }}"{% endif %}
+           {# loop with inner if (compat) #}
+           {% for k, v in computed_attrs %}
+             {% if v is not null %} {{ k }}="{{ v }}"{% endif %}
+           {% endfor %}>
+            {% if prefix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ prefix|raw }}</span>{% endif %}
+            <span>{{ label }}</span>
+            {% if suffix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ suffix|raw }}</span>{% endif %}
+        </a>
+    {% else %}
+        <button
+            type="{{ type }}"
+            {% if disabled %}disabled{% endif %}
+            {% for k, v in computed_attrs %}
+              {% if v is not null %} {{ k }}="{{ v }}"{% endif %}
+            {% endfor %}>
+            {% if prefix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ prefix|raw }}</span>{% endif %}
+            <span>{{ label }}</span>
+            {% if suffix %}<span class="inline-flex shrink-0" aria-hidden="true">{{ suffix|raw }}</span>{% endif %}
+        </button>
+    {% endif %}
+{% endmacro %}
