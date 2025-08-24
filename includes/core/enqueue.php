@@ -8,6 +8,13 @@ if (!defined('ABSPATH')) {
 // Enqueue Vite assets
 function theme_enqueue_vite_assets()
 {
+    // Dequeue WordPress styles and jQuery script
+    wp_dequeue_style('wp-block-library');
+    wp_dequeue_style('wp-block-library-theme');
+    wp_dequeue_style('wc-block-style');
+    wp_dequeue_script('jquery');
+
+
     $dist_path = get_stylesheet_directory() . '/dist';
     $dist_uri = get_stylesheet_directory_uri() . '/dist';
     $manifest_path = $dist_path . '/.vite/manifest.json';
