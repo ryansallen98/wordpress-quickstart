@@ -52,7 +52,7 @@
     
     {% set content %}
         {% if prefix %}{{ prefix|raw }}{% endif %}
-        {{ label }}
+        <span class="{{ size == 'icon' ? 'sr-only' : '' }}">{{ label }}</span>
         {% if suffix %}{{ suffix|raw }}{% endif %}
     {% endset %}
 
@@ -68,13 +68,13 @@
             {{ content|raw }}
         </a>
     {% else %}
-        <lion-button
+        <button
             type="{{ type }}"
             {% if disabled %}disabled{% endif %}
             {% for k, v in computed_attrs %}
               {% if v is not null %} {{ k }}="{{ v }}"{% endif %}
             {% endfor %}>
             {{ content|raw }}
-        </lion-button>
+        </button>
     {% endif %}
 {% endmacro %}
