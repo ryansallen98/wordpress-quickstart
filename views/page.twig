@@ -67,13 +67,45 @@
         button({
           label: 'Click Me',
           size: 'sm',
+          variant: 'outline'
+        })
+      }}
+      {{
+        button({
+          label: 'Click Me',
+          variant: 'outline'
+        })
+      }}
+      {{
+        button({
+          label: 'Click Me',
+          size: 'lg',
+          variant: 'outline',
+          suffix: lucide('thumbs-up')
+        })
+      }}
+      {{
+        button({
+          label: lucide('activity'),
+          size: 'icon',
+          variant: 'outline'
+        })
+      }}
+    </div>
+
+    <div class="flex flex-row items-center gap-2">
+      {{
+        button({
+          label: 'Click Me',
+          size: 'sm',
           variant: 'ghost'
         })
       }}
       {{
         button({
           label: 'Click Me',
-          variant: 'ghost'
+          variant: 'ghost',
+          suffix: lucide('thumbs-up')
         })
       }}
       {{
