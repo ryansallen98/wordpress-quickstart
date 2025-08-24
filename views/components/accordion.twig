@@ -1,3 +1,10 @@
+{# =========================
+   Accordion Macros (Twig + Alpine.js)
+   - Keyboard navigation scoped per group
+   - Robust focus using x-ref + $refs
+   - Works with multiple groups on a page
+   ========================= #}
+
 {# Accordion Group #}
 {% macro group_start(type = 'single', heading_level = 3) %}
 {% set _h = heading_level in [2,3,4,5,6] ? heading_level : 3 %}
@@ -5,35 +12,51 @@
   x-data="{
     mode: '{{ type }}',
     selected: {{ type == 'multiple' ? '[]' : 'null' }},
-    headers: [],
-    register(id) { if (!this.headers.includes(id)) this.headers.push(id) },
-    isOpen(id) { return this.mode === 'multiple' ? this.selected.includes(id) : this.selected === id },
+    headers: [],             // ordered list of header IDs in this group
+    register(id) {           // called by each header button (on its x-init)
+      if (!this.headers.includes(id)) this.headers.push(id)
+    },
+    isOpen(id) {
+      return this.mode === 'multiple' ? this.selected.includes(id) : this.selected === id
+    },
     toggle(id) {
       if (this.mode === 'multiple') {
-        const i = this.selected.indexOf(id);
-        if (i > -1) { this.selected.splice(i, 1) } else { this.selected.push(id) }
+        const i = this.selected.indexOf(id)
+        if (i > -1) this.selected.splice(i, 1)
+        else this.selected.push(id)
       } else {
-        this.selected = this.selected === id ? null : id;
+        this.selected = this.selected === id ? null : id
       }
     },
+    _focusById(id) {
+      // Focus the corresponding header button via x-ref
+      const ref = 'ctrl_' + id
+      this.$refs[ref]?.focus()
+    },
     focusNext(id) {
-      const i = this.headers.indexOf(id);
-      if (i === -1) return;
-      const next = (i + 1) % this.headers.length;
-      requestAnimationFrame(() => document.getElementById('ctrl_' + this.headers[next])?.focus());
+      const i = this.headers.indexOf(id)
+      if (i === -1) return
+      const next = (i + 1) % this.headers.length
+      requestAnimationFrame(() => this._focusById(this.headers[next]))
     },
     focusPrev(id) {
-      const i = this.headers.indexOf(id);
-      if (i === -1) return;
-      const prev = (i - 1 + this.headers.length) % this.headers.length;
-      requestAnimationFrame(() => document.getElementById('ctrl_' + this.headers[prev])?.focus());
+      const i = this.headers.indexOf(id)
+      if (i === -1) return
+      const prev = (i - 1 + this.headers.length) % this.headers.length
+      requestAnimationFrame(() => this._focusById(this.headers[prev]))
     },
-    focusFirst() { if (this.headers[0]) document.getElementById('ctrl_' + this.headers[0])?.focus() },
-    focusLast()  { if (this.headers.length) document.getElementById('ctrl_' + this.headers[this.headers.length-1])?.focus() }
+    focusFirst() {
+      if (!this.headers.length) return
+      requestAnimationFrame(() => this._focusById(this.headers[0]))
+    },
+    focusLast()  {
+      if (!this.headers.length) return
+      const last = this.headers[this.headers.length - 1]
+      requestAnimationFrame(() => this._focusById(last))
+    }
   }"
   x-bind:data-accordion-mode="mode"
   x-bind:data-accordion="true"
-  x-init="$el.querySelectorAll('[data-acc-header]').forEach(b => headers.push(b.dataset.accHeader))"
   role="group"
 >
   {% set __H = 'h' ~ _h %}
@@ -50,11 +73,13 @@
 {% set _h = heading_level in [2,3,4,5,6] ? heading_level : 3 %}
 {% set __H = 'h' ~ _h %}
 <div
-  x-init="{{ initially_open ? ( 'mode===\"multiple\"?selected.push(\"' ~ _id ~ '\"):selected=\"' ~ _id ~ '\"' ) : '' }}; register('{{ _id }}')"
+  x-init="{{ initially_open ? ( 'mode===\"multiple\"?selected.push(\"' ~ _id ~ '\"):selected=\"' ~ _id ~ '\"' ) : '' }}"
   class="border-b last:border-b-0"
 >
   <{{ __H }} class="w-full">
     <button
+      x-ref="ctrl_{{ _id }}"
+      x-init="register('{{ _id }}')"
       id="ctrl_{{ _id }}"
       data-acc-header="{{ _id }}"
       type="button"
