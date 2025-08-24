@@ -4,47 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee96bfe38b5fd908f755df94e9b4ac22",
+    "content-hash": "7c40ef6c6b6da6f3326321a56731cd26",
     "packages": [
-        {
-            "name": "components/font-awesome",
-            "version": "6.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/components/font-awesome.git",
-                "reference": "399200378d29bacb524c0e19318ea5ff5d74aa7f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/components/font-awesome/zipball/399200378d29bacb524c0e19318ea5ff5d74aa7f",
-                "reference": "399200378d29bacb524c0e19318ea5ff5d74aa7f",
-                "shasum": ""
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "files": [
-                        "css/all.min.css",
-                        "webfonts/*"
-                    ],
-                    "styles": [
-                        "css/all.css"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "CC-BY-4.0",
-                "MIT",
-                "OFL-1.1"
-            ],
-            "description": "Font Awesome, the iconic SVG, font, and CSS framework.",
-            "support": {
-                "issues": "https://github.com/components/font-awesome/issues",
-                "source": "https://github.com/components/font-awesome/tree/6.5.2"
-            },
-            "time": "2024-04-08T15:15:22+00:00"
-        },
         {
             "name": "gehrisandro/tailwind-merge-php",
             "version": "v1.1.2",
@@ -111,6 +72,58 @@
                 }
             ],
             "time": "2024-05-21T17:32:42+00:00"
+        },
+        {
+            "name": "natewiebe13/php-lucide",
+            "version": "v1.0.95",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/natewiebe13/php-lucide.git",
+                "reference": "c5553fae6e5624214519c5d1642d82285cf7aca9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/natewiebe13/php-lucide/zipball/c5553fae6e5624214519c5d1642d82285cf7aca9",
+                "reference": "c5553fae6e5624214519c5d1642d82285cf7aca9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "ext-json": "*",
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lucide\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nate Wiebe",
+                    "email": "nate@northern.co"
+                }
+            ],
+            "description": "PHP library for Lucide icons",
+            "keywords": [
+                "icons",
+                "lucide",
+                "svg"
+            ],
+            "support": {
+                "issues": "https://github.com/natewiebe13/php-lucide/issues",
+                "source": "https://github.com/natewiebe13/php-lucide/tree/v1.0.95"
+            },
+            "time": "2025-08-12T13:30:25+00:00"
         },
         {
             "name": "psr/simple-cache",
