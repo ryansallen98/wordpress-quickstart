@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html {{ site.language_attributes }}>
+<html {{ site.language_attributes }} class="dark">
   <head>
     <meta charset="{{ site.charset }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,7 +9,7 @@
     {{ function('wp_head') }}
   </head>
 
-  <body {{ function('body_class') }}>
+  <body {{ function('body_class', ['antialiased']) }}>
     {{ function('wp_body_open') }}
     <main>
       {% block content %}
