@@ -2,7 +2,7 @@
 {% from 'components/button.twig' import button %}
 
 {% block content %}
-  <div class="flex flex-col gap-4 p-16">
+  <div class="flex flex-col gap-4 p-8">
     <div class="flex flex-row items-center gap-2">
       {{
         button({
@@ -12,14 +12,21 @@
       }}
       {{
         button({
-          label: 'Click Me',
-          size: 'md'
+          label: 'Click Me'
         })
       }}
       {{
         button({
           label: 'Click Me',
-          size: 'lg'
+          size: 'lg',
+          suffix: lucide('thumbs-up')
+        })
+      }}
+
+      {{
+        button({
+          label: lucide('activity'),
+          size: 'icon'
         })
       }}
     </div>
@@ -35,7 +42,6 @@
       {{
         button({
           label: 'Click Me',
-          size: 'md',
           variant: 'secondary'
         })
       }}
@@ -43,6 +49,14 @@
         button({
           label: 'Click Me',
           size: 'lg',
+          variant: 'secondary',
+          suffix: lucide('thumbs-up')
+        })
+      }}
+      {{
+        button({
+          label: lucide('activity'),
+          size: 'icon',
           variant: 'secondary'
         })
       }}
@@ -59,7 +73,6 @@
       {{
         button({
           label: 'Click Me',
-          size: 'md',
           variant: 'ghost'
         })
       }}
@@ -67,6 +80,14 @@
         button({
           label: 'Click Me',
           size: 'lg',
+          variant: 'ghost',
+          suffix: lucide('thumbs-up')
+        })
+      }}
+      {{
+        button({
+          label: lucide('activity'),
+          size: 'icon',
           variant: 'ghost'
         })
       }}
@@ -83,7 +104,6 @@
       {{
         button({
           label: 'Click Me',
-          size: 'md',
           variant: 'link'
         })
       }}
@@ -91,6 +111,14 @@
         button({
           label: 'Click Me',
           size: 'lg',
+          variant: 'link',
+          suffix: lucide('thumbs-up')
+        })
+      }}
+      {{
+        button({
+          label: lucide('activity'),
+          size: 'icon',
           variant: 'link'
         })
       }}
@@ -107,7 +135,6 @@
       {{
         button({
           label: 'Click Me',
-          size: 'md',
           variant: 'destructive'
         })
       }}
@@ -116,14 +143,14 @@
           label: 'Click Me',
           size: 'lg',
           variant: 'destructive',
-          suffix: '<i class="fa-solid fa-thumbs-up"></i>'
+          suffix: lucide('thumbs-up')
         })
       }}
       {{
         button({
-          label: '<i class="fa-solid fa-image"></i>',
+          label: lucide('activity'),
           size: 'icon',
-          variant: 'primary'
+          variant: 'destructive'
         })
       }}
     </div>
