@@ -1,5 +1,7 @@
 {% extends 'base.twig' %}
+
 {% from 'components/button.twig' import button %}
+{% import 'components/accordion.twig' as acc %}
 
 {% block content %}
   <div class="flex flex-col gap-4 p-8">
@@ -25,7 +27,8 @@
 
       {{
         button({
-          label: lucide('activity'),
+          label: 'Click Me',
+          suffix: lucide('activity'),
           size: 'icon'
         })
       }}
@@ -55,7 +58,8 @@
       }}
       {{
         button({
-          label: lucide('activity'),
+          label: 'Click Me',
+          suffix: lucide('activity'),
           size: 'icon',
           variant: 'secondary'
         })
@@ -86,7 +90,8 @@
       }}
       {{
         button({
-          label: lucide('activity'),
+          label: 'Click Me',
+          suffix: lucide('activity'),
           size: 'icon',
           variant: 'outline'
         })
@@ -118,7 +123,8 @@
       }}
       {{
         button({
-          label: lucide('activity'),
+          label: 'Click Me',
+          suffix: lucide('activity'),
           size: 'icon',
           variant: 'ghost'
         })
@@ -149,7 +155,8 @@
       }}
       {{
         button({
-          label: lucide('activity'),
+          label: 'Click Me',
+          suffix: lucide('activity'),
           size: 'icon',
           variant: 'link'
         })
@@ -180,11 +187,46 @@
       }}
       {{
         button({
-          label: lucide('activity'),
+          label: 'Click Me',
+          suffix: lucide('activity'),
           size: 'icon',
           variant: 'destructive'
         })
       }}
+    </div>
+    <div>
+      {{ acc.group_start('single') }}
+
+      {{ acc.item_start('one', 'What browsers are supported?') }}
+      Our website is optimized for the latest versions of Chrome, Firefox, Safari,
+      and Edge. Check our <a
+        href="#"
+        class="text-primary dark:text-primary-dark underline underline-offset-2"
+      >
+        documentation
+      </a>.
+      {{ acc.item_end() }}
+
+      {{ acc.item_start('two', 'How can I contact customer support?') }}
+      Reach us at <a
+        href="mailto:support@example.com"
+        class="text-primary dark:text-primary-dark underline underline-offset-2"
+      >
+        support@example.com
+      </a>
+      or call <strong>1-800-123-4567</strong>.
+      {{ acc.item_end() }}
+
+      {{ acc.item_start('three', 'What is the refund policy?', true) }}
+      See our <a
+        href="#"
+        class="text-primary dark:text-primary-dark underline underline-offset-2"
+      >
+        refund policy
+      </a>.
+      {{ acc.item_end() }}
+
+      {{ acc.group_end() }}
     </div>
   </div>
 {% endblock %}
