@@ -11,11 +11,12 @@
 {% set keys = debug|keys %}
 {% set initial = keys|first %}
 
-<!-- prettier-ignore-start -->
-<script {{ csp_nonce_attr|default('') }}>
-  window.AlpineData?.("debugPanel", () => ({
+<div
+  x-data="{
     open: JSON.parse(localStorage.getItem('debug-open') ?? 'false'),
-    active: localStorage.getItem('debug-active') ?? '{{ initial|e('js') }}',
+    active: localStorage.getItem('debug-active') ?? '{{ initial|e(
+    'js'
+  ) }}',
     toggleOpen() {
       this.open = !this.open;
       localStorage.setItem('debug-open', JSON.stringify(this.open));
@@ -28,12 +29,7 @@
       this.$watch('open', v => localStorage.setItem('debug-open', JSON.stringify(v)));
       this.$watch('active', v => localStorage.setItem('debug-active', v));
     }
-  }));
-</script>
-<!-- prettier-ignore-end -->
-
-<div
-  x-data="debugPanel()"
+  }"
   class="fixed bottom-4 left-4 overflow-hidden rounded-md bg-neutral-900"
   :class="open ? 'w-2xl max-w-2xl' : ''"
 >
@@ -45,13 +41,21 @@
     type="button"
   >
     <div class="flex items-center gap-2">
-      {{ lucide('bug-off') }}
+      {{
+        lucide(
+          'bug-off',
+          {
+            class: 'size-5'
+          }
+        )
+      }}
       <span :class="open ? '' : 'sr-only'">Debug</span>
     </div>
     {{
       lucide(
         'minus',
         {
+          class: 'size-4',
           ':class': "open ? '' : 'sr-only'"
         }
       )
@@ -87,8 +91,10 @@
           x-cloak
         >
           <!-- prettier-ignore-start -->
-          <pre class="m-0! max-h-120 min-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"><code class="language-json">{{ item|json_encode(constant('JSON_PRETTY_PRINT'))|e('html') }}</code></pre>
-          <!-- prettier-ignore-end -->
+          <pre
+            class="m-0! max-h-120 min-h-120 overflow-auto rounded-md bg-neutral-800! p-4 text-white"
+          ><code class="language-json">{{ item|json_encode(constant('JSON_PRETTY_PRINT'))|e('html') }}</code></pre>
+        <!-- prettier-ignore-end -->
         </div>
       {% endfor %}
     </div>
