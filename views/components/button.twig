@@ -20,7 +20,7 @@
 
     {% set variants = {
         primary:     'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
-        destructive: 'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+        destructive: 'bg-destructive text-white shadow-xs hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 dark:hover:bg-destructive/80',
         outline:     'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
         secondary:   'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
         ghost:       'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
@@ -68,13 +68,13 @@
             {{ content|raw }}
         </a>
     {% else %}
-        <button
+        <lion-button
             type="{{ type }}"
             {% if disabled %}disabled{% endif %}
             {% for k, v in computed_attrs %}
               {% if v is not null %} {{ k }}="{{ v }}"{% endif %}
             {% endfor %}>
             {{ content|raw }}
-        </button>
+        </lion-button>
     {% endif %}
 {% endmacro %}
