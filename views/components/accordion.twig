@@ -1,0 +1,96 @@
+{# Accordion Group #}
+{% macro group_start(type = 'single', heading_level = 3) %}
+{% set _h = heading_level in [2,3,4,5,6] ? heading_level : 3 %}
+<div
+  x-data="{
+    mode: '{{ type }}',
+    selected: {{ type == 'multiple' ? '[]' : 'null' }},
+    headers: [],
+    register(id) { if (!this.headers.includes(id)) this.headers.push(id) },
+    isOpen(id) { return this.mode === 'multiple' ? this.selected.includes(id) : this.selected === id },
+    toggle(id) {
+      if (this.mode === 'multiple') {
+        const i = this.selected.indexOf(id);
+        if (i > -1) { this.selected.splice(i, 1) } else { this.selected.push(id) }
+      } else {
+        this.selected = this.selected === id ? null : id;
+      }
+    },
+    focusNext(id) {
+      const i = this.headers.indexOf(id);
+      if (i === -1) return;
+      const next = (i + 1) % this.headers.length;
+      requestAnimationFrame(() => document.getElementById('ctrl_' + this.headers[next])?.focus());
+    },
+    focusPrev(id) {
+      const i = this.headers.indexOf(id);
+      if (i === -1) return;
+      const prev = (i - 1 + this.headers.length) % this.headers.length;
+      requestAnimationFrame(() => document.getElementById('ctrl_' + this.headers[prev])?.focus());
+    },
+    focusFirst() { if (this.headers[0]) document.getElementById('ctrl_' + this.headers[0])?.focus() },
+    focusLast()  { if (this.headers.length) document.getElementById('ctrl_' + this.headers[this.headers.length-1])?.focus() }
+  }"
+  x-bind:data-accordion-mode="mode"
+  x-bind:data-accordion="true"
+  x-init="$el.querySelectorAll('[data-acc-header]').forEach(b => headers.push(b.dataset.accHeader))"
+  role="group"
+>
+  {% set __H = 'h' ~ _h %}
+{% endmacro %}
+
+{% macro group_end() %}
+</div>
+{% endmacro %}
+
+
+{# Accordion Item #}
+{% macro item_start(id, trigger, initially_open = false, heading_level = 3) %}
+{% set _id = id %}
+{% set _h = heading_level in [2,3,4,5,6] ? heading_level : 3 %}
+{% set __H = 'h' ~ _h %}
+<div
+  x-init="{{ initially_open ? ( 'mode===\"multiple\"?selected.push(\"' ~ _id ~ '\"):selected=\"' ~ _id ~ '\"' ) : '' }}; register('{{ _id }}')"
+  class="border-b last:border-b-0"
+>
+  <{{ __H }} class="w-full">
+    <button
+      id="ctrl_{{ _id }}"
+      data-acc-header="{{ _id }}"
+      type="button"
+      aria-controls="panel_{{ _id }}"
+      @click="toggle('{{ _id }}')"
+      :aria-expanded="isOpen('{{ _id }}') ? 'true' : 'false'"
+      :aria-disabled="$el.hasAttribute('disabled') ? 'true' : 'false'"
+      @keydown.arrow-down.prevent="focusNext('{{ _id }}')"
+      @keydown.arrow-up.prevent="focusPrev('{{ _id }}')"
+      @keydown.home.prevent="focusFirst()"
+      @keydown.end.prevent="focusLast()"
+      class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[aria-expanded=true]>svg]:rotate-180 w-full"
+    >
+      <span>{{ trigger|raw }}</span>
+      {{ lucide('chevron-down', {
+        class: 'text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200',
+        'aria-hidden': 'true',
+        focusable: 'false'
+      }) }}
+    </button>
+  </{{ __H }}>
+  <div 
+    x-cloak 
+    x-show="isOpen('{{ _id }}')" 
+    x-collapse 
+    x-bind:inert="!isOpen('{{ _id }}')" 
+    id="panel_{{ _id }}" 
+    role="region" 
+    aria-labelledby="ctrl_{{ _id }}"
+    class="overflow-hidden text-sm"
+  >
+    <div class="pt-0 pb-4">
+{% endmacro %}
+
+{% macro item_end() %}
+    </div>
+  </div>
+</div>
+{% endmacro %}
