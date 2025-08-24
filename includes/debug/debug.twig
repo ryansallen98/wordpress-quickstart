@@ -45,10 +45,17 @@
     type="button"
   >
     <div class="flex items-center gap-2">
-      <i class="fa-solid fa-bug-slash"></i>
+      {{ lucide('bug-off') }}
       <span :class="open ? '' : 'sr-only'">Debug</span>
     </div>
-    <i :class="open ? 'fa-solid fa-minus' : 'sr-only'"></i>
+    {{
+      lucide(
+        'minus',
+        {
+          ':class': "open ? '' : 'sr-only'"
+        }
+      )
+    }}
   </button>
 
   <div class="p-2 pt-4" :class="open ? '' : 'hidden'">
