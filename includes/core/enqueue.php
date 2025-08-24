@@ -49,39 +49,4 @@ function theme_enqueue_vite_assets()
     }
 }
 
-// Enqueue Font Awesome
-function theme_enqueue_font_awesome()
-{
-    $fa_rel = 'vendor/components/font-awesome/css/all.min.css';
-    $fa_path = get_stylesheet_directory() . '/' . $fa_rel;
-    $fa_uri = get_stylesheet_directory_uri() . '/' . $fa_rel;
-    $version = null;
-
-    // Try to read Composer's installed.json
-    $composer_info = get_stylesheet_directory() . '/vendor/composer/installed.json';
-    if (file_exists($composer_info)) {
-        $installed = json_decode(file_get_contents($composer_info), true);
-
-        // Format differs between Composer 1/2
-        $packages = isset($installed['packages']) ? $installed['packages'] : $installed;
-        foreach ($packages as $pkg) {
-            if (($pkg['name'] ?? '') === 'components/font-awesome') {
-                $version = $pkg['version'] ?? null;
-                break;
-            }
-        }
-    }
-
-    if (file_exists($fa_path)) {
-        wp_enqueue_style(
-            'font-awesome',
-            $fa_uri,
-            [],
-            $version ?: null
-        );
-    }
-}
-
-
 add_action('wp_enqueue_scripts', 'theme_enqueue_vite_assets');
-add_action('wp_enqueue_scripts', 'theme_enqueue_font_awesome');
