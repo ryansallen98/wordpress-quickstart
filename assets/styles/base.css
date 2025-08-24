@@ -14,9 +14,3 @@
   background-color: var(--primary);
   color: var(--primary-foreground);
 }
-
-i {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-}
