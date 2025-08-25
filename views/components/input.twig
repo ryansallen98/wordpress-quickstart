@@ -1,0 +1,110 @@
+{% macro input(opts = {}) %}
+  {# ===== Props ===== #}
+  {% set label        = opts.label        | default(null) %}
+  {% set type         = opts.type         | default('text') %}
+  {% set name         = opts.name         | default(null) %}
+  {% set id           = opts.id           | default((name ? ('input-' ~ name|replace({'[':'-','}':'',' ':'-'}) ) : ('input-' ~ random()))) %}
+  {% set placeholder  = opts.placeholder  | default(null) %}
+  {% set disabled     = opts.disabled     | default(false) %}
+  {% set readonly     = opts.readonly     | default(false) %}
+  {% set required     = opts.required     | default(false) %}
+  {% set value        = opts.value        | default(null) %}
+  {% set autocomplete = opts.autocomplete | default(name) %}
+  {% set classes      = opts.class        | default('') %}
+  {% set attrs        = opts.attributes   | default({}) %}
+  {% set prefix       = opts.prefix       | default(null) %}
+  {% set suffix       = opts.suffix       | default(null) %}
+  {% set block        = opts.block        | default(false) %}
+  {% set description  = opts.description  | default(null) %}
+  {% set error        = opts.error        | default(false) %}
+  {% set errorMessage = opts.errorMessage | default(null) %}
+
+  {# ===== Styling ===== #}
+  {% set base = 'file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive' %}
+  {% set padL = prefix ? ' pl-8' : '' %}
+  {% set padR = suffix ? ' pr-8' : '' %}
+  {% set width = block ? ' w-full' : '' %}
+  {% set composed = (twmerge is defined ? twmerge(base ~ width ~ padL ~ padR ~ ' ' ~ classes) : (base ~ width ~ padL ~ padR ~ ' ' ~ classes))|trim %}
+  {% set affix = "pointer-events-none absolute text-muted-foreground [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0" %}
+
+  {# ===== A11y IDs for help & error ===== #}
+  {% set desc_id  = description ? (id ~ '-desc') : null %}
+  {% set err_id   = errorMessage  ? (id ~ '-err')  : null %}
+
+  {# Build aria-describedby list (merge with any user-provided) #}
+  {% set describedby_list = [] %}
+  {% if attrs['aria-describedby'] is defined and attrs['aria-describedby'] %}
+    {% set describedby_list = describedby_list|merge([attrs['aria-describedby']]) %}
+  {% endif %}
+  {% if desc_id %}{% set describedby_list = describedby_list|merge([desc_id]) %}{% endif %}
+  {% if err_id  %}{% set describedby_list = describedby_list|merge([err_id])  %}{% endif %}
+  {% set describedby = describedby_list|join(' ') %}
+
+  {# Prefer bound value like :value, so avoid plain value= when present #}
+  {% if (':value') in attrs|keys %}
+    {% set value = null %}
+  {% endif %}
+
+  {# ===== Attributes (defaults first, allow user attrs to override) ===== #}
+  {% set default_attrs = {
+    id: id,
+    name: name,
+    type: type,
+    placeholder: placeholder,
+    value: value,
+    autocomplete: autocomplete,
+    disabled: disabled ? 'disabled' : null,
+    readonly: readonly ? 'readonly' : null,
+    required: required ? 'required' : null,
+    'aria-required': required ? 'true' : null,
+    'aria-disabled': disabled ? 'true' : null,
+    'aria-invalid': (error or errorMessage) ? 'true' : null,
+    'aria-describedby': describedby ? describedby : null,
+    'aria-errormessage': (error or errorMessage) and err_id ? err_id : null,
+    'data-invalid': (error or errorMessage) ? 'true' : null
+  } %}
+
+  {% set computed_attrs = default_attrs|merge(attrs) %}
+
+  <div class="flex flex-col gap-2 {{ block ? 'w-full' : 'w-fit' }}">
+    {% if label %}
+      <label
+        for="{{ id }}"
+        class="flex items-center gap-2 text-sm leading-none font-medium select-none {{ (error or errorMessage) ? 'text-destructive' : '' }}"
+      >
+        {{ label }}{% if required %}<span class="text-destructive">*</span>{% endif %}
+      </label>
+    {% endif %}
+
+    <div class="relative flex items-center">
+      {% if prefix %}
+        <span class="{{ affix }} left-3" aria-hidden="true">{{ prefix }}</span>
+      {% endif %}
+
+      <input
+        class="{{ composed }}"
+        {% for k, v in computed_attrs %}
+          {% if v is not null %}
+            {{- ' ' ~ k }}="{{ v }}"
+          {% endif %}
+        {% endfor %}
+      />
+
+      {% if suffix %}
+        <span class="{{ affix }} right-3" aria-hidden="true">{{ suffix }}</span>
+      {% endif %}
+    </div>
+
+    {% if description %}
+      <p id="{{ desc_id }}" class="text-xs text-muted-foreground">
+        {{ description }}
+      </p>
+    {% endif %}
+
+    {% if errorMessage %}
+      <p id="{{ err_id }}" class="text-xs text-destructive" role="alert" aria-live="polite">
+        {{ errorMessage }}
+      </p>
+    {% endif %}
+  </div>
+{% endmacro %}
