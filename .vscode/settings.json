@@ -4,5 +4,13 @@
   "[twig]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["labelledby", "linecap", "linejoin", "lucide"]
+  "cSpell.words": [
+    "alpinejs",
+    "htmx",
+    "labelledby",
+    "linecap",
+    "linejoin",
+    "lucide",
+    "Swup"
+  ]
 }
