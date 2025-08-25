@@ -1,4 +1,4 @@
 <?php
 
-$GLOBALS['timberContext'] = Timber::context();
-ob_start();
+$context = Timber::context();
+Timber::render('layouts/header.twig', $context);
