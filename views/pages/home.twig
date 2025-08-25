@@ -1,9 +1,10 @@
 {% from 'components/button.twig' import btn %}
+{% from 'components/input.twig' import input %}
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
   <div
-    class="bg-primary dark:bg-secondary dark:text-secondary-foreground text-primary-foreground mb-8 rounded-xl p-8 pt-60 shadow-xl"
+    class="bg-primary dark:bg-secondary dark:text-secondary-foreground text-primary-foreground hero mb-8 rounded-xl p-8 pt-60 shadow-xl"
   >
     <div class="prose-xl max-w-3xl">
       <h1>{{ post.title }}</h1>
@@ -14,7 +15,7 @@
   </div>
 
   <form
-    class="relative grid grid-cols-[1fr_4fr] items-start gap-8"
+    class="content relative grid grid-cols-[1fr_4fr] items-start gap-8 px-4"
     id="posts-form"
     method="get"
     action="{{ site.home_url }}"
@@ -22,24 +23,37 @@
     hx-target="#posts"
     hx-swap="outerHTML"
     hx-indicator="#posts-indicator"
-    :hx-push-url="`?s=${encodeURIComponent(s)}`"
+    hx-trigger="keyup changed delay:300ms from:#search-input"
+    :hx-push-url="`{{ posts_url }}` + (s ? `?s=${encodeURIComponent(s)}` : '')"
     onsubmit="return false;"
     x-data="{
-      s: ''
+      s: '{{ params.s }}'
     }"
   >
-    <aside class="border-border sticky top-8 rounded-md border p-4 shadow-sm">
+    <aside
+      class="border-border bg-card sticky top-36 rounded-md border p-4 shadow-sm"
+    >
       {# Required params for admin-ajax #}
       <input type="hidden" name="action" value="htmx_posts" />
       <input type="hidden" name="nonce" value="{{ htmxWP.nonce }}" />
 
       {# Search input #}
-      <input
-        x-model="s"
-        name="s"
-        placeholder="Search posts..."
-        hx-trigger="keyup changed delay:300ms, search"
-      />
+      {{
+        input({
+          label: 'Search',
+          name: 's',
+          id: 'search-input',
+          placeholder: 'Search posts...',
+          suffix: lucide('search'),
+          block: true,
+          type: 'text',
+          value: params.s,
+          attributes: {
+            'x-model': 's',
+            'hx-trigger': 'keyup changed delay:300ms'
+          }
+        })
+      }}
     </aside>
 
     <div class="relative">
@@ -48,12 +62,7 @@
         class="bg-background/50 absolute top-0 left-0 hidden h-full w-full"
       ></div>
 
-      {% include 'partials/post-loop.twig' with {
-        posts: posts,
-        posts_per_page: posts_per_page,
-        paged: paged,
-        total_posts: total_posts
-      } %}
+      {% include 'partials/post-loop.twig' %}
     </div>
   </form>
 {% endblock %}
