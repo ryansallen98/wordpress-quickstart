@@ -24,6 +24,7 @@
     "alpinejs": "^3.14.9",
     "htmx.org": "^2.0.6",
     "prismjs": "^1.30.0",
+    "swup": "^4.8.2",
     "tailwindcss": "^4.1.12"
   }
 }
