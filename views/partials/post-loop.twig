@@ -1,0 +1,109 @@
+{% from 'components/button.twig' import btn %}
+
+<div id="posts">
+  {% if total_posts > 0 %}
+    <div class="text-muted-foreground mb-4 text-sm">
+      Showing <strong>{{ range.start }} – {{ range.end }}</strong>
+      of {{ total_posts }} posts
+    </div>
+  {% endif %}
+
+  {% if posts is not empty %}
+    <div class="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-3 xl:grid-cols-4">
+      {% for p in posts %}
+        <a href="{{ p.link }}" class="rounded-lg">
+          <article
+            class="bg-card border-border group flex h-full flex-col overflow-hidden rounded-lg border shadow-sm"
+          >
+            <div
+              class="bg-muted text-muted-foreground h-48 w-full overflow-hidden"
+            >
+              {% if p.thumbnail.src %}
+                <img
+                  src="{{ p.thumbnail.src }}"
+                  srcset="{{ p.thumbnail.srcset }}"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  alt="{{
+                  p.thumbnail.alt is defined and p.thumbnail.alt
+                    ? p.thumbnail.alt
+                    : p.title
+                  }}"
+                  class="h-full w-full object-cover transition-transform duration-200 ease-in-out group-hover:scale-105"
+                  loading="lazy"
+                />
+              {% else %}
+                <div
+                  class="flex h-full w-full items-center justify-center transition-transform duration-200 ease-in-out group-hover:scale-105"
+                >
+                  {{
+                    lucide(
+                      'image',
+                      {
+                        class: 'size-9 stroke-1 opacity-50'
+                      }
+                    )
+                  }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="flex flex-1 flex-col justify-between space-y-2 p-4">
+              <div>
+                {% if p.category %}
+                  <span
+                    class="bg-primary text-primary-foreground mb-4 inline-flex rounded px-2 py-0.5 text-xs font-medium"
+                  >
+                    {{ p.category }}
+                  </span>
+                {% endif %}
+                <h2 class="mb-1 text-xl leading-tight font-semibold">
+                  {{ p.title }}
+                </h2>
+                <span
+                  class="text-muted-foreground mb-2 inline-flex items-center text-sm"
+                >
+                  {{
+                    lucide(
+                      'calendar',
+                      {
+                        class: 'mr-2 size-4 stroke-1'
+                      }
+                    )
+                  }}
+                  {{ p.date }}
+                </span>
+
+                <p class="text-muted-foreground text-sm">
+                  {{ (p.excerpt
+                    |replace({
+                      '<a': '<!--a',
+                      '</a>': '</a-->'
+                    })
+                    |raw
+                    |slice(0, 60))
+                    ~ '…' }}
+                </p>
+              </div>
+
+              {{
+                btn({
+                  label: 'Read full story',
+                  variant: 'outline',
+                  type: 'submit',
+                  class: 'mt-4',
+                  block: true,
+                  suffix: lucide('chevron-right'),
+                  tag: 'span'
+                })
+              }}
+            </div>
+          </article>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted-foreground">
+      Sorry, no posts matched your search.
+    </p>
+  {% endif %}
+</div>
