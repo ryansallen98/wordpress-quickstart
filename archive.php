@@ -1,6 +1,6 @@
 <?php
 
-$templates = array('archive.twig', 'index.twig');
+$templates = array('pages/archive.twig', 'pages/index.twig');
 
 $context = Timber::context();
 
@@ -16,11 +16,11 @@ if (is_day()) {
     $archive_id = get_queried_object_id(); // Get the current tag ID
 } elseif (is_category()) {
     $context['title'] = single_cat_title('', false);
-    array_unshift($templates, 'archive-' . get_query_var('cat') . '.twig');
+    array_unshift($templates, 'pages/archive-' . get_query_var('cat') . '.twig');
     $archive_id = get_queried_object_id(); // Get the current category ID
 } elseif (is_post_type_archive()) {
     $context['title'] = post_type_archive_title('', false);
-    array_unshift($templates, 'archive-' . get_post_type() . '.twig');
+    array_unshift($templates, 'pages/archive-' . get_post_type() . '.twig');
     // For custom post type archives, you might need a different approach to get related custom fields
 }
 
