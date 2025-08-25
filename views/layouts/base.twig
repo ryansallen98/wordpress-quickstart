@@ -3,9 +3,6 @@
   <head>
     <meta charset="{{ site.charset }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {% block head %}
-
-    {% endblock %}
     {{ function('wp_head') }}
   </head>
 
@@ -19,11 +16,7 @@
       {% endblock %}
     </main>
 
-    <footer>
-      {% block footer %}
-
-      {% endblock %}
-    </footer>
+    {{ function('get_footer') }}
     {{ function('wp_footer') }}
   </body>
 </html>
