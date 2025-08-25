@@ -6,3 +6,5 @@ if (is_home()) {
     array_unshift($templates, 'pages/front-page.twig', 'pages/home.twig', 'pages/page.twig');
 }
 Timber::render($templates, $context);
+
+echo "index.php";
