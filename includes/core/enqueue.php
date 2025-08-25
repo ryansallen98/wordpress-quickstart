@@ -54,6 +54,12 @@ function theme_enqueue_vite_assets()
             true
         );
     }
+
+    // Provide AJAX URL + nonce to your templates
+    wp_localize_script('htmx', 'htmxWP', [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('htmx_wp'),
+    ]);
 }
 
 add_action('wp_enqueue_scripts', 'theme_enqueue_vite_assets');
