@@ -1,0 +1,51 @@
+html.is-changing .transition-main {
+  transition: opacity 250ms ease-in-out;
+}
+
+html.is-leaving .transition-main {
+  transition: opacity 250ms ease-in-out;
+}
+
+html.is-animating .transition-main {
+  opacity: 0;
+}
+
+.hero,
+.content,
+.hero * {
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+  transform: none;
+  opacity: 1;
+}
+
+html.is-animating.is-leaving .hero {
+  transform: translateY(-2rem);
+  opacity: 0;
+}
+
+html.is-animating.is-leaving .hero *,
+html.is-animating.is-leaving .content {
+  transform: translateY(2rem);
+  opacity: 0;
+}
+
+html.is-animating.is-rendering .hero {
+  transform: translateY(-2rem);
+  opacity: 0;
+}
+
+html.is-animating.is-rendering .hero *,
+html.is-animating.is-rendering .content {
+  transform: translateY(2rem);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero,
+  .content,
+  .hero * {
+    transition: none !important;
+  }
+}
