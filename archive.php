@@ -36,3 +36,5 @@ if (isset($archive_id)) { // Make sure $archive_id is set
 $context['state'] = $context;
 
 Timber::render($templates, $context);
+
+echo "archive.php";
