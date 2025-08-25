@@ -1,0 +1,8 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+  {{ post.content }}
+  {% if function('has_flexible', 'content') %}
+    {{ function('the_flexible', 'content') }}
+  {% endif %}
+{% endblock %}
