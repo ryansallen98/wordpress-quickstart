@@ -90,3 +90,12 @@ add_filter('timber/twig', function (\Twig\Environment $twig) {
 
     return $twig;
 });
+
+// HTMX integration
+add_filter('timber/context', function ($context) {
+    $context['htmxWP'] = [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('htmx_wp'),
+    ];
+    return $context;
+});
