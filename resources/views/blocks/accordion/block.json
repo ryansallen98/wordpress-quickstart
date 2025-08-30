@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "name": "wordpress-quickstart-blocks/accordion",
+  "title": "Accordion",
+  "description": "A simple, accessible accordion built with ACF fields.",
+  "category": "widgets",
+  "icon": "list-view",
+  "keywords": ["accordion", "toggle", "collapse"],
+  "supports": {
+    "jsx": false,
+    "align": ["wide", "full"],
+    "anchor": true,
+    "multiple": true,
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "acf": {
+    "mode": "auto",
+    "renderCallback": "\\App\\blade_render_callback",
+    "blockVersion": 2
+  },
+  "style": "file:./accordion.css",
+  "viewScript": "file:./accordion.js",
+  "example": {
+    "attributes": {
+      "mode": "preview"
+    }
+  }
+}
