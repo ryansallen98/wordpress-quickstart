@@ -7,6 +7,7 @@
 namespace App;
 
 use Illuminate\Support\Facades\Vite;
+use DirectoryIterator;
 
 /**
  * Define block namespace.
@@ -52,6 +53,54 @@ add_filter('admin_head', function () {
         'resources/ts/editor.ts',
     ])->toHtml();
 });
+
+/**
+ * Register the theme blocks.
+ *
+ * @return void
+ */
+add_action('init', __NAMESPACE__ . '\\theme_blocks_init');
+
+function theme_blocks_init()
+{
+    // Each subfolder in /resources/views/blocks is a block (must contain block.json)
+    $directory = resource_path('views') . '/blocks/';
+    if (!is_dir($directory)) {
+        return;
+    }
+
+    $block_directory = new DirectoryIterator($directory);
+
+    foreach ($block_directory as $block) {
+        if ($block->isDir() && !$block->isDot()) {
+            // Let WP read block.json in that folder and register it
+            register_block_type($block->getRealPath());
+        }
+    }
+}
+
+/**
+ * Render callback for ACF blocks using Blade.
+ * Expects Blade at: resources/views/blocks/{slug}/{slug}.blade.php
+ *
+ * @return void
+ */
+function blade_render_callback($block, string $content = '', bool $is_preview = false, int $post_id = 0)
+{
+    $slug = str_replace(THEME_BLOCK_SLUG . '/', '', $block['name']);
+    $block['slug'] = $slug;
+
+    // Optional: also pass ACF fields to the view
+    $fields = function_exists('get_fields') ? (get_fields($post_id) ?: []) : [];
+
+    echo \Roots\view("blocks.{$slug}.template", [
+        'block'       => $block,
+        'fields'      => $fields,
+        'is_preview'  => $is_preview,
+        'post_id'     => $post_id,
+        'content'     => $content,
+    ])->render();
+}
 
 /**
  * Use the generated theme.json file.
