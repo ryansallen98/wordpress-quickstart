@@ -1,0 +1,71 @@
+{
+  "name": "wordpress/quickstart",
+  "type": "wordpress-theme",
+  "license": "MIT",
+  "description": "A Wordpress quickstart theme. It leverages Sage/Blade for template/folder management, HTMX and Alpine.js for interactivity, and Tailwind CSS for styling. The theme is designed to be lightweight, fast, and extendable.",
+  "homepage": "https://github.com/ryansallen98/wordpress-quickstart",
+  "authors": [
+    {
+      "name": "Ben Word",
+      "email": "ben@benword.com",
+      "homepage": "https://github.com/retlehs"
+    },
+    {
+      "name": "Scott Walkinshaw",
+      "email": "scott.walkinshaw@gmail.com",
+      "homepage": "https://github.com/swalkinshaw"
+    },
+    {
+      "name": "QWp6t",
+      "email": "hi@qwp6t.me",
+      "homepage": "https://github.com/qwp6t"
+    },
+    {
+      "name": "Brandon Nifong",
+      "email": "brandon@tendency.me",
+      "homepage": "https://github.com/log1x"
+    },
+    {
+      "name": "Ryan Allen",
+      "email": "ryansallen53@gmail.com",
+      "homepage": "https://github.com/ryansallen98"
+    }
+  ],
+  "keywords": [
+    "wordpress"
+  ],
+  "support": {
+    "issues": "https://github.com/roots/sage/issues",
+    "forum": "https://discourse.roots.io/"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "require": {
+    "php": ">=8.2",
+    "blade-ui-kit/blade-heroicons": "^2.6",
+    "blade-ui-kit/blade-icons": "^1.8",
+    "gehrisandro/tailwind-merge-php": "^1.1",
+    "roots/acorn": "^5.0"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.20"
+  },
+  "suggest": {
+    "log1x/sage-directives": "A collection of useful Blade directives for WordPress and Sage (^1.0)."
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "post-autoload-dump": [
+      "Roots\\Acorn\\ComposerScripts::postAutoloadDump"
+    ]
+  }
+}

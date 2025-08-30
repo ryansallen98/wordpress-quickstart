@@ -1,0 +1,40 @@
+{
+  "name": "wordpress-quickstart",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "translate": "npm run translate:pot && npm run translate:update",
+    "translate:pot": "wp i18n make-pot . ./resources/lang/sage.pot --include=\"theme.json,patterns,app,resources\"",
+    "translate:update": "for file in ./resources/lang/*.po; do wp i18n update-po ./resources/lang/sage.pot $file; done",
+    "translate:compile": "npm run translate:mo && npm run translate:js",
+    "translate:js": "wp i18n make-json ./resources/lang --pretty-print",
+    "translate:mo": "wp i18n make-mo ./resources/lang ./resources/lang"
+  },
+  "devDependencies": {
+    "@roots/vite-plugin": "^1.0.2",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.12",
+    "@types/alpinejs": "^3.13.11",
+    "@types/node": "^24.3.0",
+    "@types/wordpress__dom-ready": "^2.3.0",
+    "alpinejs": "^3.14.9",
+    "htmx.org": "^2.0.6",
+    "laravel-vite-plugin": "^1.2.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-blade": "^2.1.21",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "tailwindcss": "^4.1.12",
+    "tw-animate-css": "^1.3.7",
+    "typescript": "^5.9.2",
+    "vite": "^6.2.0"
+  },
+  "dependencies": {
+    "@alpinejs/collapse": "^3.14.9"
+  }
+}

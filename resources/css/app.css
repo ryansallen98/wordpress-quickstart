@@ -1,0 +1,12 @@
+@import "tailwindcss" theme(static);
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@source "../views/";
+@source "../../app/";
+
+@import './theme.css';
+
+
+/* Alpine */
+[x-cloak]{ display:none !important; }

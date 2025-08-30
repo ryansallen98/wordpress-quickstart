@@ -1,0 +1,13 @@
+/*
+Theme Name:         Wordpress Quickstart
+Theme URI:          https://github.com/ryansallen98/wordpress-quickstart
+Description:        A Wordpress quickstart theme. It leverages Sage/Blade for template/folder management, HTMX and Alpine.js for interactivity, and Tailwind CSS for styling. The theme is designed to be lightweight, fast, and extendable.
+Version:            11.0.1
+Author:             Ryan Allen
+Author URI:         https://github.com/ryansallen98/
+Text Domain:        wordpress-quickstart
+License:            MIT License
+License URI:        https://opensource.org/licenses/MIT
+Requires PHP:       8.2
+Requires at least:  6.6
+*/
