@@ -5,6 +5,7 @@ import "htmx.org";
 
 // Components
 import accordionComponent from './components/accordion';
+import carouselComponent from "./components/carousel";
 
 // Import assets
 import.meta.glob([
@@ -21,6 +22,13 @@ declare global {
 
 // Initialize Alpine
 window.Alpine = Alpine;
+
+// Register Alpine plugins
 Alpine.plugin(collapse);
+
+// Register Alpine components
 Alpine.data('accordionComponent', accordionComponent);
+Alpine.data('carouselComponent', carouselComponent);
+
+// Start Alpine
 Alpine.start();
