@@ -50,7 +50,7 @@ $classes = trim('wpqs-accordion-block ' . $className . ($align ? " align{$align}
   @endforeach
   @else
   @if (!empty($is_preview))
-  <div class="wpqs-accordion-block__placeholder">
+  <div>
     Add rows to the Accordion field group to see items here.
   </div>
   @endif
