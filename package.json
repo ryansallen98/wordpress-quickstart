@@ -33,9 +33,8 @@
     "tailwindcss": "^4.1.12",
     "tw-animate-css": "^1.3.7",
     "typescript": "^5.9.2",
+    "@alpinejs/collapse": "^3.14.9",
+    "embla-carousel": "^8.6.0",
     "vite": "^6.2.0"
-  },
-  "dependencies": {
-    "@alpinejs/collapse": "^3.14.9"
   }
 }
