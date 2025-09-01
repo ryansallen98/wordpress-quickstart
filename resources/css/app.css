@@ -1,5 +1,5 @@
-@import "tailwindcss" theme(static);
-@import "tw-animate-css";
+@import 'tailwindcss' theme(static);
+@import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
 
 @source "../views/";
@@ -7,6 +7,12 @@
 
 @import './theme.css';
 
-
 /* Alpine */
-[x-cloak]{ display:none !important; }
+[x-cloak] {
+  display: none !important;
+}
+
+/* HTMX */
+.htmx-request {
+  display: inline-flex !important;
+}
