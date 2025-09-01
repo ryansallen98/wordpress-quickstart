@@ -21,7 +21,7 @@ The theme is designed to be lightweight, fast, and extendable.
 - 📦 Block editor support built-in
 - 🔄 HTMX and Alpine.js for modern frontend interactions
 - ✍️ TypeScript support by default
-- 🧱 Shadcn inspired blade components built with alpine.js
+- 🧱 Easily customizable Shadcn inspired blade components built with alpine.js
 
 
 ## Installation
