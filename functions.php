@@ -13,7 +13,7 @@ use Roots\Acorn\Application;
 |
 */
 
-if (! file_exists($composer = __DIR__.'/vendor/autoload.php')) {
+if (!file_exists($composer = __DIR__ . '/vendor/autoload.php')) {
     wp_die(__('Error locating autoloader. Please run <code>composer install</code>.', 'wordpress-quickstart'));
 }
 
@@ -52,10 +52,26 @@ Application::configure()
 
 collect(['setup', 'filters', 'acf'])
     ->each(function ($file) {
-        if (! locate_template($file = "app/{$file}.php", true, true)) {
+        if (!locate_template($file = "app/{$file}.php", true, true)) {
             wp_die(
                 /* translators: %s is replaced with the relative file path */
                 sprintf(__('Error locating <code>%s</code> for inclusion.', 'wordpress-quickstart'), $file)
+            );
+        }
+    });
+
+collect(glob(__DIR__ . '/app/WooCommerce/*.php'))
+    ->map(function ($file) {
+        // Make the path relative to theme root, e.g. "app/WooCommerce/file.php"
+        return str_replace(get_theme_file_path() . '/', '', $file);
+    })
+    ->each(function ($file) {
+        if (! locate_template($file, true, true)) {
+            wp_die(
+                sprintf(
+                    __('Error locating <code>%s</code> for inclusion.', 'sage'),
+                    $file
+                )
             );
         }
     });
