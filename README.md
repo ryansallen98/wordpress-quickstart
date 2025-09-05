@@ -22,6 +22,7 @@ The theme is designed to be lightweight, fast, and extendable.
 - 🔄 HTMX and Alpine.js for modern frontend interactions
 - ✍️ TypeScript support by default
 - 🧱 Easily customizable Shadcn inspired blade components built with alpine.js
+- 🛒 WooCommerce integration
 
 
 ## Installation
