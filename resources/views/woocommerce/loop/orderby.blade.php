@@ -1,22 +1,3 @@
-<?php
-/**
- * WooCommerce: Orderby (Blade)
- * Mirrors templates/loop/orderby.php but renders a custom Blade select.
- *
- * Expects (from WooCommerce):
- * - $catalog_orderby_options : array  id => label
- * - $orderby                 : string current value
- * - $use_label               : bool   show "Sort by" label
- */
-
-if (! defined('ABSPATH')) {
-  exit();
-}
-
-$idSuffix = wp_unique_id();
-$selectId = "woocommerce-orderby-{$idSuffix}";
-?>
-
 <form
   method="get"
   x-data="{
