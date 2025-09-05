@@ -9,7 +9,7 @@
  * @version 2.1.0
  */
 
- namespace App\WooCommerce;
+namespace App\WooCommerce;
 
 // remove_filter('body_class', 'wc_body_class');
 // remove_filter('post_class', 'wc_product_post_class', 20);
