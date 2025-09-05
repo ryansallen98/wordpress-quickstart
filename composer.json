@@ -47,8 +47,9 @@
     "php": ">=8.2",
     "blade-ui-kit/blade-heroicons": "^2.6",
     "blade-ui-kit/blade-icons": "^1.8",
-    "generoi/sage-woocommerce": "^1.1",
     "gehrisandro/tailwind-merge-php": "^1.1",
+    "generoi/sage-woocommerce": "^1.1",
+    "mallardduck/blade-lucide-icons": "^1.23",
     "roots/acorn": "^5.0"
   },
   "require-dev": {
