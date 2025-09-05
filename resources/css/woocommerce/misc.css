@@ -1,0 +1,27 @@
+.woocommerce .clear {
+  @apply h-4;
+}
+
+.woocommerce .clear:last-child {
+  @apply h-0;
+}
+
+.woocommerce .lost_password {
+  @apply text-sm no-underline! hover:underline! mt-4;
+}
+
+.woocommerce .lost_password a {
+  @apply no-underline! hover:underline! text-muted-foreground hover:text-primary;
+}
+
+.woocommerce .woocommerce-form-login__rememberme {
+  @apply ml-auto mb-2 text-sm;
+}
+
+.woocommerce-form__label-for-checkbox span {
+  @apply text-sm! font-medium!;
+}
+
+.woocommerce .checkout-inline-error-message {
+  @apply text-destructive text-xs;
+}

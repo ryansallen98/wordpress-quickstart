@@ -1,0 +1,58 @@
+.woocommerce .input-text,
+.woocommerce .country_select,
+.woocommerce .state_select {
+    @apply file:text-foreground placeholder:text-muted-foreground
+      selection:bg-primary selection:text-primary-foreground dark:bg-input/30
+      border-input flex h-9 min-w-0 rounded-md border bg-background px-3 py-1
+      text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex
+      file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium
+      disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 
+      md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 
+      focus-visible:ring-[3px] aria-invalid:ring-destructive/20 
+      dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive w-full;
+}
+
+.woocommerce .password-input {
+  @apply relative flex items-center;
+}
+
+.woocommerce textarea.input-text {
+    @apply h-32!;
+}
+
+.woocommerce .password-input input{
+  @apply pr-10!;
+}
+
+.woocommerce .woocommerce-validated input,
+.woocommerce .woocommerce-validated .select2-selection {
+    @apply border-success!;
+}
+
+.woocommerce .woocommerce-invalid input,
+.woocommerce .woocommerce-invalid .select2-selection {
+    @apply border-destructive!;
+}
+
+.woocommerce .woocommerce-invalid label {
+    @apply text-destructive!;
+}
+
+.woocommerce .show-password-input {
+  @apply absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-primary/70 hover:text-primary z-10;
+}
+
+.woocommerce .show-password-input::after {
+  content: "";
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: currentColor;
+  -webkit-mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3' fill='%23000'/%3E%3Cpath d='M2.5 12C4.5 7.5 8 5 12 5s7.5 2.5 9.5 7c-2 4.5-5.5 7-9.5 7s-7.5-2.5-9.5-7z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+          mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3' fill='%23000'/%3E%3Cpath d='M2.5 12C4.5 7.5 8 5 12 5s7.5 2.5 9.5 7c-2 4.5-5.5 7-9.5 7s-7.5-2.5-9.5-7z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+.woocommerce .show-password-input.display-password::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.94 17.94A10.5 10.5 0 0112 19c-4.478 0-8.268-2.943-9.542-7A10.5 10.5 0 016.06 6.06' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath d='M9.9 9.9a3 3 0 104.2 4.2' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cline x1='1' y1='1' x2='23' y2='23' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.94 17.94A10.5 10.5 0 0112 19c-4.478 0-8.268-2.943-9.542-7A10.5 10.5 0 016.06 6.06' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath d='M9.9 9.9a3 3 0 104.2 4.2' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cline x1='1' y1='1' x2='23' y2='23' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+}

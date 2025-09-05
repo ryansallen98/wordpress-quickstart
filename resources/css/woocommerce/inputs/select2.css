@@ -1,0 +1,72 @@
+.select2-selection {
+    @apply border-input! h-9! rounded-md! text-sm whitespace-nowrap shadow-xs p-0! m-0!
+    dark:bg-input/30 dark:hover:bg-input/50 flex! items-center;
+}
+
+.select2-selection__rendered {
+    @apply h-full px-3! py-2! leading-4! flex items-center text-foreground! w-full;
+}
+
+.select2-selection__placeholder {
+    @apply text-muted-foreground!;
+}
+
+.select2-selection__arrow {
+    @apply relative! h-full! top-0! right-0! w-fit! flex items-center justify-center pr-3 text-muted-foreground!;
+}
+
+.select2-selection__arrow svg {
+    @apply w-4 h-4 transition-all! duration-200 ease-in-out;
+}
+
+.select2-container--open .select2-selection__arrow svg {
+    @apply rotate-180 duration-200 ease-in-out transition-all;
+}
+
+.select2-selection__arrow b {
+    @apply hidden!;
+}
+
+.select2-dropdown {
+    @apply bg-popover border border-input rounded-md shadow-lg;
+}
+
+.select2-dropdown--below {
+    @apply border-t-[1px]! rounded-md! border-border! mt-1;
+}
+
+.select2-dropdown--above {
+    @apply border-b-[1px]! rounded-md! border-border! -mt-1!;
+}
+
+.select2-results {
+    @apply text-foreground;
+}
+
+.select2-results__options {
+    @apply p-1 
+}
+
+.select2-results__option {
+    @apply rounded-sm text-sm!;
+}
+
+.select2-results__option--highlighted {
+    @apply bg-accent! text-accent-foreground!;
+}
+
+.select2-results__option[data-selected="true"] {
+    @apply bg-accent! text-accent-foreground!;
+}
+
+.select2-search--dropdown {
+    @apply p-0!;
+}
+
+.select2-search__field {
+  @apply !border-0 !border-b !border-border text-foreground! px-3! py-2! rounded-t-md text-sm!;
+}
+
+.select2-results__message {
+    @apply text-muted-foreground!;
+}
