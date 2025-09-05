@@ -1,8 +1,8 @@
 <?php
 
- namespace App\WooCommerce;
+namespace App\WooCommerce;
 
- 
+
 /**
  * Use default Stripe Theme
  */
