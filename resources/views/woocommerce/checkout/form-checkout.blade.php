@@ -1,4 +1,4 @@
-@push('checkout_left')
+@push('left')
   @php
     do_action('woocommerce_checkout_before_order_review_heading');
   @endphp
@@ -22,46 +22,55 @@
   @endphp
 @endpush
 
-@push('checkout_right')
-  @php
-    do_action('woocommerce_before_checkout_form', $checkout);
-  @endphp
+@push('right')
+  <div class="mx-auto flex-1 lg:max-w-[720px] lg:min-w-[560px] lg:p-12">
+    @php
+      do_action('woocommerce_before_checkout_form', $checkout);
+    @endphp
 
-  <form
-    name="checkout"
-    method="post"
-    class="checkout woocommerce-checkout"
-    action="<?php echo esc_url(wc_get_checkout_url()); ?>"
-    enctype="multipart/form-data"
-    aria-label="<?php echo esc_attr__('Checkout', 'woocommerce'); ?>"
-  >
-    @if ($checkout->get_checkout_fields())
-      @php
-        do_action('woocommerce_checkout_before_customer_details');
-      @endphp
+    <form
+      name="checkout"
+      method="post"
+      class="checkout woocommerce-checkout"
+      action="<?php echo esc_url(wc_get_checkout_url()); ?>"
+      enctype="multipart/form-data"
+      aria-label="<?php echo esc_attr__('Checkout', 'woocommerce'); ?>"
+    >
+      @if ($checkout->get_checkout_fields())
+        @php
+          do_action('woocommerce_checkout_before_customer_details');
+        @endphp
 
-      <div class="col2-set" id="customer_details">
-        <div class="col-1">
-          @php
-            do_action('woocommerce_checkout_billing');
-          @endphp
+        <div class="col2-set" id="customer_details">
+          <div class="col-1">
+            @php
+              do_action('woocommerce_checkout_billing');
+            @endphp
+          </div>
+
+          <div class="col-2">
+            @php
+              do_action('woocommerce_checkout_shipping');
+            @endphp
+          </div>
         </div>
 
-        <div class="col-2">
-          @php
-            do_action('woocommerce_checkout_shipping');
-          @endphp
-        </div>
-      </div>
+        @php
+          do_action('woocommerce_checkout_after_customer_details');
+        @endphp
+      @endif
+    </form>
 
-      @php
-        do_action('woocommerce_checkout_after_customer_details');
-      @endphp
-    @endif
-  </form>
+    @php
+      do_action('woocommerce_after_checkout_form', $checkout);
+    @endphp
+  </div>
 @endpush
 
-@include('woocommerce.checkout.layouts.shell', [
-  'returnUrl'  => $returnUrl,
-  'returnText' => $returnText,
-])
+@include(
+  'woocommerce.checkout.layouts.shell',
+  [
+    'returnUrl' => $returnUrl,
+    'returnText' => $returnText,
+  ]
+)

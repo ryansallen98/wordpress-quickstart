@@ -12,7 +12,7 @@
     {{-- Prefer explicit vars, else fallback to stack --}}
     {!! $left ?? '' !!}
     @empty($left)
-      @stack('checkout_left')
+      @stack('left')
     @endempty
   </div>
 
@@ -27,7 +27,7 @@
     <div class="mx-auto flex-1 lg:max-w-[720px] lg:min-w-[560px] w-full --lg:p-12">
       {!! $right ?? '' !!}
       @empty($right)
-        @stack('checkout_right')
+        @stack('right')
       @endempty
     </div>
   </div>
