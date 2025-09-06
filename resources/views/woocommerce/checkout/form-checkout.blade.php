@@ -26,10 +26,7 @@
   <div
     class="h-full"
     x-data="{ tab: '{{ $should_show_login ? 'login' : 'checkout' }}' }"
-    x-init="
-      // Allow #login hash to force the tab
-      if (location.hash === '#login') tab = 'login'
-    "
+    x-init="if (location.hash === '#login') tab = 'login'"
   >
     @php
       do_action('woocommerce_before_checkout_form', $checkout);
