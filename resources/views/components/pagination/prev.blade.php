@@ -2,14 +2,13 @@
   'href' => '#'
 ])
 
-<x-button
+<a
   aria-label="{{ __('Go to previous page', 'wordpress-quickstart') }}"
-  variant="outline"
-  size="default"
+  class="btn btn-outline"
   href="{{ $href }}"
 >
   <x-lucide-chevron-left aria-hidden="true" />
   <span class="hidden sm:block">
     {{ __('Previous', 'wordpress-quickstart') }}
   </span>
-</x-button>
+</a>

@@ -3,13 +3,12 @@
   'href' => '#'
 ])
 
-<x-button
+<a
   aria-current="{{ $isActive ? 'page' : 'false' }}"
   data-slot="pagination-link"
   data-active="{{ $isActive ? 'true' : 'false' }}"
-  variant="{{ $isActive ? 'outline' : 'ghost' }}"
-  size="icon"
   href="{{ $href }}"
+  class="btn {{ $isActive ? 'btn-outline' : 'btn-ghost' }} btn-icon"
 >
   {!! $slot !!}
-</x-button>
+</a>

@@ -26,8 +26,8 @@
   );
 @endphp
 
-<x-button
-  variant="outline"
+<a
+  class="btn btn-outline"
   href="{{ $href }}"
   target="{{ $target }}"
   aria-describedby="{{ $aria_describedby }}"
@@ -53,7 +53,7 @@
       @break
   @endswitch
   {{ $label }}
-</x-button>
+</a>
 
 @if (! empty($args['aria-describedby_text'] ?? null))
   <span
