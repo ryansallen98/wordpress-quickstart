@@ -21,4 +21,12 @@
   @php
     woocommerce_checkout_coupon_form();
   @endphp
+
+  @include(
+    'woocommerce.partials.totals',
+    [
+      'subtotals' => $subtotals,
+      'order_total' => $order_total,
+    ]
+  )
 </div>
