@@ -1,36 +1,45 @@
-.checkbox {
+.checkbox,
+.woocommerce-form__label-for-checkbox {
   @apply relative inline-flex cursor-pointer items-center gap-0.5 pl-11 text-sm font-medium;
   user-select: none;
 }
 
-.checkbox input {
+.checkbox input,
+.woocommerce-form__label-for-checkbox input {
   @apply hidden;
 }
 
-.checkbox::before {
+.checkbox::before,
+.woocommerce-form__label-for-checkbox::before {
   @apply bg-muted absolute top-1/2 left-0 -mt-2.5 h-5 w-9 rounded-full transition-colors duration-150 ease-in-out content-[''];
 }
 
-.checkbox::after {
+.checkbox::after,
+.woocommerce-form__label-for-checkbox::after {
   @apply bg-muted-foreground absolute top-1/2 left-0.5 -mt-2 h-4 w-4 rounded-full shadow-md transition-transform duration-150 ease-in-out content-[''];
   transform: translateX(0);
 }
 
-.checkbox:has(input:checked)::before {
+.checkbox:has(input:checked)::before,
+.woocommerce-form__label-for-checkbox:has(input:checked)::before {
   @apply bg-primary;
 }
 
-.checkbox:has(input:checked)::after {
+.checkbox:has(input:checked)::after,
+.woocommerce-form__label-for-checkbox:has(input:checked)::after {
   transform: translateX(1rem);
 }
 
-.checkbox:has(input:focus-visible)::before {
+.checkbox:has(input:focus-visible)::before,
+.woocommerce-form__label-for-checkbox:has(input:focus-visible)::before {
   @apply outline outline-2 outline-offset-2 outline-ring;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .checkbox::before,
-  .checkbox::after {
+  .checkbox::after,
+  .woocommerce-form__label-for-checkbox::before,
+  .woocommerce-form__label-for-checkbox::after {
     transition: none;
   }
 }
