@@ -23,12 +23,20 @@
 @endpush
 
 @push('right')
-  <div class="mx-auto flex-1 lg:max-w-[720px] lg:min-w-[560px] lg:p-12">
+  <div
+    class="mx-auto flex-1 lg:max-w-[720px] lg:min-w-[560px] lg:p-12"
+    x-data="{ tab: '{{ $should_show_login ? 'login' : 'checkout' }}' }"
+    x-init="
+      // Allow #login hash to force the tab
+      if (location.hash === '#login') tab = 'login'
+    "
+  >
     @php
       do_action('woocommerce_before_checkout_form', $checkout);
     @endphp
 
     <form
+      x-show="tab === 'checkout'"
       name="checkout"
       method="post"
       class="checkout woocommerce-checkout"
