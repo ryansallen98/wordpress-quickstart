@@ -10,8 +10,6 @@ class FormPay extends Composer
 {
     protected static $views = [
         'woocommerce.checkout.form-pay',
-        // if you ever render the partial directly, you can add it here too:
-        // 'woocommerce.checkout.partials.order',
     ];
 
     public function with(): array
