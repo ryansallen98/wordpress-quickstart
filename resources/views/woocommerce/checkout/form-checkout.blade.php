@@ -24,7 +24,7 @@
 
 @push('right')
   <div
-    class="mx-auto flex-1 lg:max-w-[720px] lg:min-w-[560px] lg:p-12"
+    class="h-full"
     x-data="{ tab: '{{ $should_show_login ? 'login' : 'checkout' }}' }"
     x-init="
       // Allow #login hash to force the tab
