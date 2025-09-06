@@ -213,9 +213,9 @@ remove_action('woocommerce_shop_loop_item_title', 'woocommerce_template_loop_pro
  * @see wc_get_pay_buttons()
  */
 // remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10);
-// remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
+remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
 // remove_action('woocommerce_checkout_order_review', 'woocommerce_order_review', 10);
-// remove_action('woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20);
+remove_action('woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20);
 // remove_action('woocommerce_checkout_terms_and_conditions', 'wc_checkout_privacy_policy_text', 20);
 // remove_action('woocommerce_checkout_terms_and_conditions', 'wc_terms_and_conditions_page_content', 30);
 // remove_action('woocommerce_checkout_before_customer_details', 'wc_get_pay_buttons', 30);
