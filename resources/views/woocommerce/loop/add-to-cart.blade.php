@@ -32,7 +32,7 @@
   target="{{ $target }}"
   aria-describedby="{{ $aria_describedby }}"
   data-quantity="{{ esc_attr($args['quantity'] ?? 1) }}"
-  :attributes="$attrBag"
+  {{ $attrBag }}
 >
   @switch($type)
     @case('simple')
