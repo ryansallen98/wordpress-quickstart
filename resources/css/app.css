@@ -6,6 +6,7 @@
 @source "../../app/";
 
 @import './theme.css';
+@import './components/index.css';
 @import './woocommerce/index.css';
 
 /* Alpine */
