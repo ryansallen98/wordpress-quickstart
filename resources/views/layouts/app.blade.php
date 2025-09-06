@@ -1,5 +1,5 @@
 <!doctype html>
-<html @php(language_attributes()) class="dark">
+<html @php(language_attributes())>
 
 <head>
     <meta charset="utf-8">
