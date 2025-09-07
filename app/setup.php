@@ -94,11 +94,11 @@ function blade_render_callback($block, string $content = '', bool $is_preview = 
     $fields = function_exists('get_fields') ? (get_fields($post_id) ?: []) : [];
 
     echo \Roots\view("blocks.{$slug}.template", [
-        'block'       => $block,
-        'fields'      => $fields,
-        'is_preview'  => $is_preview,
-        'post_id'     => $post_id,
-        'content'     => $content,
+        'block' => $block,
+        'fields' => $fields,
+        'is_preview' => $is_preview,
+        'post_id' => $post_id,
+        'content' => $content,
     ])->render();
 }
 
@@ -133,6 +133,10 @@ add_action('after_setup_theme', function () {
      */
     register_nav_menus([
         'primary_navigation' => __('Primary Navigation', 'wordpress-quickstart'),
+    ]);
+
+    register_nav_menus([
+        'checkout_footer' => __('Checkout Footer', 'wordpress-quickstart'),
     ]);
 
     /**
