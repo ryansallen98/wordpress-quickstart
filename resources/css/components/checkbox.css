@@ -6,7 +6,7 @@
 
 .checkbox input,
 .woocommerce-form__label-for-checkbox input {
-  @apply hidden;
+  @apply sr-only;
 }
 
 .checkbox::before,
