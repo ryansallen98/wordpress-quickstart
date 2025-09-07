@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c39cdb82d1929e072663cd3491f63b0",
+    "content-hash": "b08b2e0f4fb169962575a9a2bc04720f",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -3108,6 +3108,71 @@
                 }
             ],
             "time": "2024-09-21T08:32:55+00:00"
+        },
+        {
+            "name": "log1x/navi",
+            "version": "v3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Log1x/navi.git",
+                "reference": "97fa923a1eb1aa92d17984117b8e0f56a0a818ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Log1x/navi/zipball/97fa923a1eb1aa92d17984117b8e0f56a0a818ab",
+                "reference": "97fa923a1eb1aa92d17984117b8e0f56a0a818ab",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.14",
+                "roots/acorn": "^4.3"
+            },
+            "type": "package",
+            "extra": {
+                "acorn": {
+                    "aliases": {
+                        "Navi": "Log1x\\Navi\\Facades\\Navi"
+                    },
+                    "providers": [
+                        "Log1x\\Navi\\Providers\\NaviServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Log1x\\Navi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brandon Nifong",
+                    "email": "brandon@tendency.me"
+                }
+            ],
+            "description": "A developer-friendly alternative to the WordPress NavWalker.",
+            "keywords": [
+                "navwalker",
+                "wordpress",
+                "wordpress-plugin"
+            ],
+            "support": {
+                "issues": "https://github.com/log1x/navi/issues",
+                "source": "https://github.com/Log1x/navi/tree/v3.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Log1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-10-21T23:10:14+00:00"
         },
         {
             "name": "mallardduck/blade-lucide-icons",
@@ -6776,12 +6841,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.2"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
