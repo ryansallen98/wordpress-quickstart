@@ -12,7 +12,7 @@
 
 .woocommerce .form-row-first,
 .woocommerce .form-row-last {
-  @apply inline-flex w-full md:w-[calc(50%-0.7rem)];
+  @apply inline-flex w-full md:w-[calc(50%-0.5rem)];
 }
 
 .woocommerce .form-row-first {
