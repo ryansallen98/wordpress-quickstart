@@ -16,7 +16,7 @@
     </x-alert.title>
 
     <x-alert.description>
-      <div class="whitespace-normal h-fit">
+      <div class="whitespace-normal! h-fit">
         @php
           do_action('woocommerce_checkout_terms_and_conditions');
         @endphp
@@ -39,7 +39,7 @@
               @checked($is_checked)
               {{-- if your Blade doesn't support @checked, replace with: {!! checked($is_checked, true, false) !!} --}}
             />
-            <span class="woocommerce-terms-and-conditions-checkbox-text">
+            <span class="woocommerce-terms-and-conditions-checkbox-text whitespace-normal!">
               @php
                 wc_terms_and_conditions_checkbox_text();
               @endphp
