@@ -63,6 +63,10 @@
         @php
           do_action('woocommerce_checkout_after_customer_details');
         @endphp
+
+        @php
+          woocommerce_checkout_payment();
+        @endphp
       @endif
     </form>
 
