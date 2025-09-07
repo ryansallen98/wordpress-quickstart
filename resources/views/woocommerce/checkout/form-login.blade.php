@@ -45,7 +45,8 @@
 
       <p class="form-row w-full">
         <label for="username">
-          {{ __('Username or email', 'woocommerce') }}&nbsp;<span class="required">*</span>
+          {{ __('Username or email', 'woocommerce') }}&nbsp;
+          <span class="required">*</span>
         </label>
         <input
           type="text"
@@ -58,15 +59,18 @@
 
       <p class="form-row">
         <label for="password">
-          {{ __('Password', 'woocommerce') }}&nbsp;<span class="required">*</span>
+          {{ __('Password', 'woocommerce') }}&nbsp;
+          <span class="required">*</span>
         </label>
-        <input
-          class="input-text"
-          type="password"
-          name="password"
-          id="password"
-          autocomplete="current-password"
-        />
+          <input
+            class="input-text woocommerce-Input"
+            type="password"
+            name="password"
+            id="password"
+            autocomplete="current-password"
+            required
+            aria-required="true"
+          />
       </p>
 
       <div class="clear"></div>
@@ -74,7 +78,9 @@
       @php(do_action('woocommerce_login_form'))
 
       <p class="form-row">
-        <label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
+        <label
+          class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme"
+        >
           <input
             class="woocommerce-form__input woocommerce-form__input-checkbox"
             name="rememberme"
@@ -95,8 +101,10 @@
         </button>
       </p>
 
-      <p class="lost_password w-full flex justify-center">
-        <a href="{{ $lostPasswordUrl }}">{{ __('Lost your password?', 'woocommerce') }}</a>
+      <p class="lost_password flex w-full justify-center">
+        <a href="{{ $lostPasswordUrl }}">
+          {{ __('Lost your password?', 'woocommerce') }}
+        </a>
       </p>
 
       @php(do_action('woocommerce_login_form_end'))
