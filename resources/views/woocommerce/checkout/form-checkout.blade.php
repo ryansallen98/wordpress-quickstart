@@ -35,7 +35,7 @@
 @push('right')
   <div
     class="h-full"
-    x-data="{ tab: '{{ $should_show_login ? 'login' : 'checkout' }}' }"
+    x-data="{ tab: 'checkout'}"
     x-init="if (location.hash === '#login') tab = 'login'"
   >
     @php
