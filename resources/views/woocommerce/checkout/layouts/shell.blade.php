@@ -18,7 +18,10 @@
     </div>
 
     {{-- Legal Menu --}}
-    <nav class="p-2 px-4" aria-label="{{ __('Legal', 'sage') }}">
+    <nav
+      class="hidden p-2 px-4 lg:flex"
+      aria-label="{{ __('Legal', 'sage') }}"
+    >
       <ul class="flex items-center gap-3">
         @forelse ($menu as $item)
           <li>
@@ -58,4 +61,27 @@
       @endempty
     </div>
   </div>
+
+  {{-- Legal Menu --}}
+  <nav class="p-2 px-4 flex lg:hidden" aria-label="{{ __('Legal', 'sage') }}">
+    <ul class="flex items-center gap-3">
+      @forelse ($menu as $item)
+        <li>
+          <a
+            href="{{ $item->url }}"
+            @if(!empty($item->target)) target="{{ $item->target }}" @endif
+            @if(!empty($item->rel))    rel="{{ $item->rel }}"       @endif
+            class="text-muted-foreground hover:text-foreground {{ $item->active ?? false ? 'text-foreground' : '' }} text-sm no-underline!"
+            aria-current="{{ $item->active ?? false ? 'page' : 'false' }}"
+          >
+            {{ $item->label ?? $item->title }}
+          </a>
+        </li>
+      @empty
+        <li class="text-muted-foreground text-sm">
+          {{ __('Assign a menu to “checkout_footer”.', 'sage') }}
+        </li>
+      @endforelse
+    </ul>
+  </nav>
 </div>
