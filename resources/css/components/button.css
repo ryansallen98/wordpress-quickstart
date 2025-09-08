@@ -1,7 +1,8 @@
 @layer components {
   .btn,
   .woocommerce-button,
-  .button {
+  .button,
+  .added_to_cart {
     @apply focus-visible:ring-ring/50 focus-visible:border-ring inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap no-underline! transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 has-[>svg]:px-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
   }
 
@@ -19,7 +20,8 @@
     @apply bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs;
   }
 
-  .btn.btn-ghost {
+  .btn.btn-ghost,
+  .added_to_cart {
     @apply hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50;
   }
 
