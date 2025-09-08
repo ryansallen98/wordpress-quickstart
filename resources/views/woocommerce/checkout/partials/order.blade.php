@@ -35,7 +35,7 @@
 
         @if (! empty($item->attributes))
           <ul
-            class="text-muted-foreground mt-1 list-inside list-disc space-y-0.5 text-sm font-medium"
+            class="text-muted-foreground mt-1 space-y-0.5 text-sm font-medium"
           >
             @foreach ($item->attributes as $attr)
               <li>
