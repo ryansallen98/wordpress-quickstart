@@ -5,6 +5,9 @@ import focus from '@alpinejs/focus';
 import 'htmx.org';
 import * as FloatingUIDOM from '@floating-ui/dom';
 
+import './lib/toast';
+import './lib/wc-toast';
+
 // Import assets
 import.meta.glob(['../images/**', '../fonts/**']);
 
@@ -57,3 +60,5 @@ async function registerUsedComponents() {
   await registerUsedComponents();
   Alpine.start();
 })();
+
+
