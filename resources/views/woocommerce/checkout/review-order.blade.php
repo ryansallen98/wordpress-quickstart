@@ -18,7 +18,7 @@
 
   <x-separator />
 
-  @include('woocommerce.checkout.form-coupon-proxy')
+  @include('woocommerce.checkout.partials.form-coupon-proxy')
 
   @include(
     'woocommerce.partials.totals',
