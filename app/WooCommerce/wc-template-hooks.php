@@ -258,7 +258,7 @@ remove_action('woocommerce_checkout_order_review', 'woocommerce_checkout_payment
  * @see woocommerce_order_again_button()
  */
 // remove_action('woocommerce_view_order', 'woocommerce_order_details_table', 10);
-// remove_action('woocommerce_thankyou', 'woocommerce_order_details_table', 10);
+remove_action('woocommerce_thankyou', 'woocommerce_order_details_table', 10);
 // remove_action('woocommerce_order_details_after_order_table', 'woocommerce_order_again_button');
 
 /**
