@@ -9,37 +9,53 @@ use DOMXPath;
 // 1) Helper: parse HTML -> { text, actions[] }
 function my_wc_toast_parse_notice_html(string $html): array
 {
-    // Extract links
+    // Robust whitespace normalizer
+    $normalize = static function (string $s): string {
+        // Decode ALL entities (including &ldquo; etc)
+        $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        // Collapse whitespace
+        $s = preg_replace('/\s+/u', ' ', $s ?? '');
+        return trim((string) $s);
+    };
+
     $actions = [];
+    $text = '';
+
     if (trim($html) !== '') {
-        // Silence parsing warnings for imperfect HTML
         $doc = new DOMDocument();
+
+        // Prevent libxml warnings on partial HTML
         @$doc->loadHTML('<?xml encoding="utf-8" ?>' . $html);
+
         $xpath = new DOMXPath($doc);
 
+        // 1) Collect <a> tags into actions
         foreach ($xpath->query('//a') as $a) {
-            /** @var DOMElement $a */
-            $href = trim($a->getAttribute('href'));
-            $label = trim($a->textContent);
+            /** @var \DOMElement $a */
+            $href  = $normalize($a->getAttribute('href'));
+            $label = $normalize($a->textContent);
             if ($href !== '') {
                 $actions[] = [
                     'label' => $label !== '' ? $label : __('Open', 'your-textdomain'),
-                    'href' => $href,
+                    'href'  => $href,
                 ];
             }
         }
+
+        // 2) Remove all <a> nodes so their visible text doesn't end up in the toast body
+        foreach ($xpath->query('//a') as $a) {
+            $a->parentNode?->removeChild($a);
+        }
+
+        // 3) Extract readable text from DOM (already entity-decoded),
+        //    then normalize whitespace and trim quotes.
+        $body = $doc->getElementsByTagName('body')->item(0);
+        $raw  = $body ? $body->textContent : '';
+        $text = $normalize($raw);
     }
 
-    // Strip tags for the message text
-    $text = trim(
-        wp_specialchars_decode(
-            wp_strip_all_tags($html),
-            ENT_QUOTES
-        )
-    );
-
     return [
-        'text' => $text,
+        'text'    => $text,
         'actions' => $actions,
     ];
 }
