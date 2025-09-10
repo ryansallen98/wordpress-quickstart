@@ -1,6 +1,7 @@
 .input-text,
 .country_select,
-.state_select {
+.state_select,
+.input-select {
      @apply file:text-foreground placeholder:text-muted-foreground
       selection:bg-primary selection:text-primary-foreground dark:bg-input/30
       border-input flex h-9 min-w-0 rounded-md border bg-background px-3 py-1
@@ -14,4 +15,8 @@
 
 textarea.input-text {
     @apply h-32!;
+}
+
+.input-label {
+  @apply text-sm mt-2 font-medium;
 }
