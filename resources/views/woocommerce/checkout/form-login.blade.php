@@ -79,7 +79,7 @@
 
       <p class="form-row">
         <label
-          class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme"
+          class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme mb-2"
         >
           <input
             class="woocommerce-form__input woocommerce-form__input-checkbox"
@@ -102,7 +102,7 @@
       </p>
 
       <p class="lost_password flex w-full justify-center">
-        <a href="{{ $lostPasswordUrl }}">
+        <a href="{{ $lostPasswordUrl }}" class="no-underline! hover:underline! mt-2">
           {{ __('Lost your password?', 'woocommerce') }}
         </a>
       </p>
