@@ -51,8 +51,8 @@
 
   {{-- Progressive enhancement: visible only if JS fails / user wants manual submit --}}
   <noscript>
-    <x-button type="submit">
+    <button type="submit">
       {{ __('Apply', 'woocommerce') }}
-    </x-button>
+    </button>
   </noscript>
 </form>

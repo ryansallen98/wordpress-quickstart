@@ -15,7 +15,7 @@
   );
 @endphp
 
-<x-button
+<button
   {{ $attributes->merge(['class' => $composed]) }}
   type="button"
   x-on:click="prev"
@@ -33,4 +33,4 @@
   <span class="sr-only">
     {{ __('Previous slide', 'wordpress-quickstart') }}
   </span>
-</x-button>
+</button>

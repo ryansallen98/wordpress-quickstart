@@ -19,7 +19,7 @@
   );
 @endphp
 
-<x-button
+<button
   {{ $attributes->merge(['class' => $composed]) }}
   type="button"
   x-on:click="next"
@@ -35,4 +35,4 @@
 >
   <x-lucide-chevron-right aria-hidden="true" />
   <span class="sr-only">{{ __('Next slide', 'wordpress-quickstart') }}</span>
-</x-button>
+</button>
