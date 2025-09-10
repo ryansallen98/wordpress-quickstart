@@ -1,6 +1,6 @@
 <div class="relative flex w-full flex-col justify-between lg:flex-row">
   <div
-    class="lg:bg-accent order-first flex flex-1 flex-col justify-between gap-4 pb-0 lg:sticky lg:top-0 lg:h-[100dvh] lg:max-w-[560px] lg:overflow-y-auto lg:border-r"
+    class="lg:bg-sidebar order-first flex flex-1 flex-col justify-between gap-4 pb-0 lg:sticky lg:top-0 lg:h-[100dvh] lg:max-w-[560px] lg:overflow-y-auto lg:border-r"
   >
     <div class="p-4 lg:p-16">
       <div class="block lg:hidden">
