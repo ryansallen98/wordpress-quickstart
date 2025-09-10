@@ -1,0 +1,13 @@
+.woocommerce-validated input,
+.woocommerce-validated .select2-selection {
+    @apply border-success!;
+}
+
+.woocommerce-invalid input,
+.woocommerce-invalid .select2-selection {
+    @apply border-destructive!;
+}
+
+.woocommerce-invalid label {
+    @apply text-destructive!;
+}

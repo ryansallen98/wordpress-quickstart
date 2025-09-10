@@ -1,8 +1,2 @@
-@import './form-row.css';
-@import './misc.css';
-
-@import './inputs/inputs.css';
-@import './inputs/select2.css';
-
-
+@import './validate.css';
 @import './stripe.css';

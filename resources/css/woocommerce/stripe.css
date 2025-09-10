@@ -3,9 +3,7 @@
 }
 
 #wc-stripe-upe-form {
-  background-color: oklch(0.97 0 0);
-  color: oklch(0.145 0 0);
-  @apply w-full rounded-md text-sm mt-4 p-0 dark:p-4 pt-0 dark:border;
+  @apply py-2;
 }
 
 .form-row.woocommerce-SavedPaymentMethods-saveNew {

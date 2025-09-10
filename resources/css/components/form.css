@@ -1,7 +1,9 @@
-.woocommerce .input-text,
-.woocommerce .country_select,
-.woocommerce .state_select {
-    @apply file:text-foreground placeholder:text-muted-foreground
+/* Inputs */
+.input-text,
+.country_select,
+.state_select,
+.input-select {
+     @apply file:text-foreground placeholder:text-muted-foreground
       selection:bg-primary selection:text-primary-foreground dark:bg-input/30
       border-input flex h-9 min-w-0 rounded-md border bg-background px-3 py-1
       text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex
@@ -12,37 +14,19 @@
       dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive w-full;
 }
 
-.woocommerce .password-input {
-  @apply relative flex items-center;
-}
-
-.woocommerce textarea.input-text {
+textarea.input-text {
     @apply h-32!;
 }
 
-.woocommerce .password-input input{
-  @apply pr-10!;
+.password-input {
+  @apply relative;
 }
 
-.woocommerce .woocommerce-validated input,
-.woocommerce .woocommerce-validated .select2-selection {
-    @apply border-success!;
-}
-
-.woocommerce .woocommerce-invalid input,
-.woocommerce .woocommerce-invalid .select2-selection {
-    @apply border-destructive!;
-}
-
-.woocommerce .woocommerce-invalid label {
-    @apply text-destructive!;
-}
-
-.woocommerce .show-password-input {
+.show-password-input {
   @apply absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-primary/70 hover:text-primary z-10;
 }
 
-.woocommerce .show-password-input::after {
+.show-password-input::after {
   content: "";
   display: inline-block;
   width: 1.25rem;
@@ -52,7 +36,35 @@
           mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3' fill='%23000'/%3E%3Cpath d='M2.5 12C4.5 7.5 8 5 12 5s7.5 2.5 9.5 7c-2 4.5-5.5 7-9.5 7s-7.5-2.5-9.5-7z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
 }
 
-.woocommerce .show-password-input.display-password::after {
+.show-password-input.display-password::after {
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.94 17.94A10.5 10.5 0 0112 19c-4.478 0-8.268-2.943-9.542-7A10.5 10.5 0 016.06 6.06' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath d='M9.9 9.9a3 3 0 104.2 4.2' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cline x1='1' y1='1' x2='23' y2='23' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
           mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.94 17.94A10.5 10.5 0 0112 19c-4.478 0-8.268-2.943-9.542-7A10.5 10.5 0 016.06 6.06' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath d='M9.9 9.9a3 3 0 104.2 4.2' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cline x1='1' y1='1' x2='23' y2='23' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
 }
+
+/* Form Row */
+.form-row {
+  @apply flex flex-col gap-2 mb-2;
+}
+
+.form-row label,
+.input-label {
+  @apply text-sm mt-2 font-medium;
+}
+
+.form-row:has(input[type="checkbox"]) label {
+  @apply mt-0;
+}
+
+.form-row label .required {
+  @apply text-destructive;
+}
+
+.form-row-first,
+.form-row-last {
+  @apply inline-flex w-full md:w-[calc(50%-0.5rem)];
+}
+
+.form-row-first {
+  @apply md:mr-4;
+}
+
