@@ -2,6 +2,7 @@
 
 namespace App\View\Composers\WooCommerce\Checkout;
 
+use App\Helpers\CartAttributeHelper;
 use Roots\Acorn\View\Composer;
 use WC_Order;
 use WC_Order_Item_Product;
@@ -23,7 +24,7 @@ class ThankYou extends Composer
             'returnText' => __('Go Home', 'wordpress-quickstart'),
             'order' => $order, // handy to have in the view
             'items' => $order ? $this->buildOrderItems($order) : [],
-            'subtotals'   => $order ? $this->buildOrderSubtotals($order) : [],
+            'subtotals' => $order ? $this->buildOrderSubtotals($order) : [],
             'order_total' => $order ? $order->get_formatted_order_total() : '',
         ];
     }
@@ -73,7 +74,11 @@ class ThankYou extends Composer
     }
 
     /**
-     * Build item view-models as objects (so Blade `$item->...` works).
+     * Build item view-models for order items (Thank You page / order details).
+     *
+     * Produces:
+     * - $vm->attributes: variation selections (plain text)
+     * - $vm->custom_attributes: user-entered meta (HTML allowed; may contain <a>)
      *
      * @return array<int, stdClass>
      */
@@ -96,7 +101,7 @@ class ThankYou extends Composer
             $permalink = $visible ? $product->get_permalink() : '';
             $qty = (int) $wc_item->get_quantity();
 
-            // Build object with properties your Blade partial uses
+            // View model
             $vm = new stdClass();
             $vm->id = (int) $item_id;
             $vm->_wc_item = $wc_item; // keep original WC item for hooks
@@ -106,27 +111,132 @@ class ThankYou extends Composer
                 ? sprintf('<a href="%s" class="hover:underline">%s</a>', esc_url($permalink), esc_html($name))
                 : esc_html($name);
 
-            // Variation/meta as label/value pairs
-            $vm->attributes = [];
-            foreach ($wc_item->get_formatted_meta_data() as $meta) {
-                $vm->attributes[] = [
-                    'label' => wp_kses_post($meta->display_key),
-                    'value' => wp_kses_post(force_balance_tags($meta->display_value)),
-                ];
+            // --------------------------
+            // A) Variation selections -> $vm->attributes (plain text)
+            // --------------------------
+            $attributes = [];
+
+            // Variation attributes on order items are typically stored as meta with keys like "pa_color", "attribute_pa_size", or attribute labels.
+            // We'll classify variation-like meta and render them as plain text.
+            $raw_meta = $wc_item->get_meta_data(); // array of WC_Meta_Data
+            foreach ($raw_meta as $meta) {
+                $key = (string) $meta->get_data()['key'];
+                $value = $meta->get_data()['value'];
+
+                // Detect variation attribute keys
+                $is_variation_key =
+                    strpos($key, 'attribute_') === 0 ||
+                    strpos($key, 'pa_') === 0 ||
+                    (taxonomy_exists($key) && strpos($key, 'pa_') === 0);
+
+                if ($is_variation_key) {
+                    $label = function_exists('wc_attribute_label')
+                        ? wc_attribute_label($key, $product)
+                        : CartAttributeHelper::cleanLabel($key);
+
+                    // Value may be term slug or human text
+                    if (taxonomy_exists($key) && is_string($value)) {
+                        $term = get_term_by('slug', $value, $key);
+                        $value = $term && !is_wp_error($term) ? $term->name : $value;
+                    } elseif (is_array($value)) {
+                        $value = implode(', ', array_map('wc_clean', array_map('wp_strip_all_tags', $value)));
+                    } else {
+                        $value = wc_clean(wp_strip_all_tags((string) $value));
+                    }
+
+                    if ($label !== '' && $value !== '') {
+                        $attributes[] = ['label' => $label, 'value' => $value];
+                    }
+                }
             }
 
+            // De-dupe attrs
+            $vm->attributes = array_values(array_unique($attributes, SORT_REGULAR));
+
+            // ---------------------------------------------
+            // B) User meta (APF/Add-ons/Custom) -> $vm->custom_attributes (HTML)
+            // ---------------------------------------------
+            $custom_attributes = [];
+
+            // 1) WooCommerce's formatted meta is already user-facing (includes anchors)
+            //    get_formatted_meta_data() returns WC_Meta Objects with display_key and display_value (string HTML)
+            foreach ($wc_item->get_formatted_meta_data() as $meta) {
+                $label = CartAttributeHelper::cleanLabel($meta->display_key);
+                $value_html = force_balance_tags((string) $meta->display_value);
+
+                // --- SKIP if this is a variation attribute ---
+                $raw_key = strtolower($meta->key ?? '');
+                if (
+                    str_starts_with($raw_key, 'attribute_') ||
+                    str_starts_with($raw_key, 'pa_') ||
+                    taxonomy_exists(sanitize_title($raw_key))
+                ) {
+                    continue; // already handled in $item->attributes
+                }
+
+                if ($label !== '' && $value_html !== '') {
+                    $value_html = CartAttributeHelper::sanitizeAnchors($value_html);
+                    $custom_attributes[] = ['label' => $label, 'value' => $value_html];
+                }
+            }
+
+            // 2) Raw meta sweep for anything that wasn't formatted (e.g., custom delivery_date)
+            //    This catches keys that might not be returned by get_formatted_meta_data()
+            $whitelist_extra = ['delivery_date', 'delivery', 'pickup_date', 'pickup_time'];
+            foreach ($raw_meta as $meta) {
+                $key = (string) $meta->get_data()['key'];
+                $value = $meta->get_data()['value'];
+
+                // Skip hidden/internal
+                if ($key === '' || $key[0] === '_') {
+                    continue;
+                }
+
+                // Skip if it looks like a variation key (handled in attributes)
+                if (strpos($key, 'attribute_') === 0 || strpos($key, 'pa_') === 0) {
+                    continue;
+                }
+
+                // Only include if it’s in our whitelist or looks human-facing
+                $is_whitelisted = in_array($key, $whitelist_extra, true);
+                $looks_human = !preg_match('/^(line_total|line_tax|line_subtotal|line_subtotal_tax|qty|quantity|total|tax)$/i', $key);
+
+                if ($is_whitelisted || $looks_human) {
+                    $label = CartAttributeHelper::labelFromKey($key);
+                    $value_html = CartAttributeHelper::valueToHtml($value); // HTML with anchors when URLs
+
+                    if ($label !== '' && $value_html !== '') {
+                        // Ensure we didn't already add this (compare label+value)
+                        $dup = false;
+                        foreach ($custom_attributes as $pair) {
+                            if ($pair['label'] === $label && $pair['value'] === $value_html) {
+                                $dup = true;
+                                break;
+                            }
+                        }
+                        if (!$dup) {
+                            $custom_attributes[] = ['label' => $label, 'value' => $value_html];
+                        }
+                    }
+                }
+            }
+
+            // De-dupe custom attrs
+            $vm->custom_attributes = array_values(array_unique($custom_attributes, SORT_REGULAR));
+
+            // Description
             $vm->short_description = $product ? $product->get_short_description() : '';
 
-            // Subtotal (Woo formats per tax display settings)
+            // Subtotal formatted the Woo way
             $vm->subtotal = $order->get_formatted_line_subtotal($wc_item);
 
-            // Unit price = line total / qty (avoid /0), formatted in order currency
+            // Unit price (respect order tax display)
             $unit_total = (float) $wc_item->get_total();
             $unit_tax = (float) $wc_item->get_total_tax();
             $units = max(1, $qty);
 
-            // Match Woo display: if order displays prices incl tax, include per-unit tax too
-            $display_incl_tax = wc_prices_include_tax(); // or: $order->get_prices_include_tax()
+            // Use how the order records prices (incl/excl tax)
+            $display_incl_tax = (bool) $order->get_prices_include_tax();
             $unit_amount = $display_incl_tax
                 ? ($unit_total + $unit_tax) / $units
                 : $unit_total / $units;
