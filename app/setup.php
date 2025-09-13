@@ -135,9 +135,16 @@ add_action('after_setup_theme', function () {
         'primary_navigation' => __('Primary Navigation', 'wordpress-quickstart'),
     ]);
 
-    register_nav_menus([
-        'checkout_footer' => __('Checkout Footer', 'wordpress-quickstart'),
-    ]);
+
+    /**
+     * Register the WooCommerce menus.
+     *
+     */
+    if (class_exists('WooCommerce')) {
+        register_nav_menus([
+            'checkout_footer' => __('Checkout Footer', 'wordpress-quickstart'),
+        ]);
+    }
 
     /**
      * Disable the default block patterns.
