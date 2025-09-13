@@ -15,11 +15,13 @@
     </div>
   </div>
   <div class="w-full">
-    <div class="bg-background sticky top-0 z-10 flex justify-between border-b px-4 py-2">
+    <div class="bg-background sticky top-0 z-10 flex gap-4 border-b px-4 py-2">
       <button class="btn btn-outline btn-icon">
         <x-lucide-panel-left aria-hidden="true" /><span
           class="sr-only">{{ __('Toggle navigation', 'wordpress-quickstart') }}</span>
       </button>
+
+      @include('partials.primary-navigation')
     </div>
 
     <div class="p-8">
