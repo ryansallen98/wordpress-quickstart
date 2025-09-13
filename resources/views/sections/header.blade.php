@@ -13,14 +13,17 @@
             <input class="input-text min-w-180" type="text" id="header-search" placeholder="Search..." />
           </div>
           <div class="flex flex-row">
-            <a class="btn btn-ghost btn-icon">
-              <x-heroicon-s-user class="size-6" />
-              <span class="sr-only">{{ __('Account', 'wordpress-quickstart') }}</span>
-            </a>
-            <a class="btn btn-ghost btn-icon">
-              <x-heroicon-s-shopping-bag class="size-6" />
-              <span class="sr-only">{{ __('Cart', 'wordpress-quickstart') }}</span>
-            </a>
+            <x-theme.toggle />
+            @if(class_exists('WooCommerce'))
+              <a class="btn btn-ghost btn-icon" href="{{ get_permalink(get_option('woocommerce_myaccount_page_id')) }}">
+                <x-heroicon-s-user class="size-5" />
+                <span class="sr-only">{{ __('Account', 'wordpress-quickstart') }}</span>
+              </a>
+              <a class="btn btn-ghost btn-icon" href="{{ get_permalink(get_option('woocommerce_cart_page_id')) }}">
+                <x-heroicon-s-shopping-bag class="size-5" />
+                <span class="sr-only">{{ __('Cart', 'wordpress-quickstart') }}</span>
+              </a>
+            @endif
           </div>
         </div>
       </div>
