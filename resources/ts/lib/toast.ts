@@ -82,13 +82,13 @@ declare global {
         }
       },
 
-      typeClasses(type: ToastType) {
-        return {
-          'border-l-4 border-success': type === 'success',
-          'border-l-4 border-destructive': type === 'error',
-          'border-l-4 border-info': type === 'info',
-        };
-      },
+      // typeClasses(type: ToastType) {
+      //   return {
+      //     'border-l-4 border-success': type === 'success',
+      //     'border-l-4 border-destructive': type === 'error',
+      //     'border-l-4 border-info': type === 'info',
+      //   };
+      // },
       barClasses(type: ToastType) {
         return {
           'bg-success': type === 'success',

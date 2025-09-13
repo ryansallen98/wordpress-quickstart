@@ -53,7 +53,7 @@
           <div class="mt-2 flex gap-3" x-show="t.actions?.length">
             <template x-for="(a, i) in t.actions" :key="i">
               <button
-                class="text-sm underline underline-offset-2 hover:no-underline"
+                class="btn btn-link btn-sm -ml-2"
                 @click="handleAction(t.id, a)"
                 x-text="a.label"
               ></button>
