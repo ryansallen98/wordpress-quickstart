@@ -2,6 +2,7 @@
 
 namespace App\View\Composers\WooCommerce\Checkout;
 
+use App\Helpers\CartAttributeHelper;
 use Roots\Acorn\View\Composer;
 
 class ReviewOrder extends Composer
@@ -26,6 +27,11 @@ class ReviewOrder extends Composer
         return trim(ob_get_clean());       // return as string for the view
     }
 
+    /**
+     * Build cart items.
+     * - $item->attributes: variation selections (plain text)
+     * - $item->custom_attributes: user-entered fields (value may contain <a>)
+     */
     protected function mapCartItems(): array
     {
         if (!function_exists('WC') || !WC()->cart) {
@@ -35,7 +41,7 @@ class ReviewOrder extends Composer
         $items = [];
 
         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-            /** @var WC_Product|null $product */
+            /** @var \WC_Product|null $product */
             $product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
             $visible = apply_filters('woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key);
             $qty = (int) ($cart_item['quantity'] ?? 0);
@@ -61,41 +67,158 @@ class ReviewOrder extends Composer
             }
             $nameHtml = apply_filters('woocommerce_cart_item_name', $baseName, $cart_item, $cart_item_key);
 
-            // Attributes (plain array: [{label, value}, ...])
+            // -----------------------------------------
+            // A) Variation selections -> $attributes
+            // -----------------------------------------
             $attributes = [];
-            $itemData = function_exists('wc_get_item_data') ? wc_get_item_data($cart_item) : [];
-            if (!empty($itemData)) {
-                foreach ($itemData as $data) {
-                    $label = isset($data['key']) ? wc_clean(wp_strip_all_tags($data['key'])) : '';
-                    $value = isset($data['display'])
-                        ? wc_clean(wp_strip_all_tags($data['display']))
-                        : (isset($data['value']) ? wc_clean(wp_strip_all_tags($data['value'])) : '');
-                    if ($label !== '' && $value !== '') {
-                        $attributes[] = ['label' => $label, 'value' => $value];
-                    }
-                }
-            } elseif (!empty($cart_item['variation'])) {
+            if (!empty($cart_item['variation'])) {
                 foreach ($cart_item['variation'] as $attrKey => $attrValue) {
                     if (!$attrValue)
                         continue;
+
                     $taxonomy = str_replace('attribute_', '', $attrKey);
                     $label = function_exists('wc_attribute_label')
                         ? wc_attribute_label($taxonomy, $product)
                         : ucwords(str_replace(['pa_', '_', '-'], ['', ' ', ' '], $taxonomy));
-                    if (taxonomy_exists($taxonomy)) {
-                        $term = get_term_by('slug', $attrValue, $taxonomy);
-                        $value = $term && !is_wp_error($term) ? $term->name : wc_clean($attrValue);
-                    } else {
-                        $value = wc_clean($attrValue);
+
+                    $value = taxonomy_exists($taxonomy)
+                        ? (($term = get_term_by('slug', $attrValue, $taxonomy)) && !is_wp_error($term) ? $term->name : wc_clean($attrValue))
+                        : wc_clean($attrValue);
+
+                    $label = CartAttributeHelper::cleanLabel($label);
+                    if ($label !== '' && $value !== '') {
+                        $attributes[] = ['label' => $label, 'value' => $value];
                     }
-                    $attributes[] = ['label' => $label, 'value' => $value];
                 }
             }
 
-            // Short description (HTML, sanitized)
+            // Build an index of rendered variation pairs (label|value) to skip duplicates later
+            $renderedAttrIndex = [];
+            foreach ($attributes as $a) {
+                $l = strtolower(trim(wp_strip_all_tags((string) ($a['label'] ?? ''))));
+                $v = strtolower(trim(wp_strip_all_tags((string) ($a['value'] ?? ''))));
+                if ($l !== '' && $v !== '') {
+                    $renderedAttrIndex["{$l}|{$v}"] = true;
+                }
+            }
+
+            // -------------------------------------------------------
+            // B) User-entered meta -> $custom_attributes (HTML OK)
+            // -------------------------------------------------------
+            $custom_attributes = [];
+
+            // 1) wc_get_item_data (preferred)
+            $display_items = function_exists('wc_get_item_data') ? wc_get_item_data($cart_item, false) : [];
+            foreach ($display_items as $data) {
+                $label = CartAttributeHelper::cleanLabel($data['key'] ?? $data['name'] ?? $data['label'] ?? '');
+                $raw = $data['display'] ?? ($data['value'] ?? ($data['values'] ?? ''));
+                $valueHtml = CartAttributeHelper::valueToHtml($raw);
+
+                // skip if same as an already-rendered variation attribute
+                $labelKey = strtolower(trim(wp_strip_all_tags($label)));
+                $valueKey = strtolower(trim(wp_strip_all_tags($valueHtml)));
+                if ($labelKey !== '' && $valueKey !== '' && isset($renderedAttrIndex["{$labelKey}|{$valueKey}"])) {
+                    continue;
+                }
+
+                if ($label !== '' && $valueHtml !== '') {
+                    $custom_attributes[] = ['label' => $label, 'value' => $valueHtml];
+                }
+            }
+
+            // 2) WooCommerce Product Add-Ons (addons)
+            if (!empty($cart_item['addons']) && is_array($cart_item['addons'])) {
+                foreach ($cart_item['addons'] as $addon) {
+                    $label = CartAttributeHelper::cleanLabel($addon['name'] ?? '');
+                    $raw = $addon['value'] ?? '';
+                    $valueHtml = CartAttributeHelper::valueToHtml($raw);
+
+                    // duplicate check against variation attributes
+                    $labelKey = strtolower(trim(wp_strip_all_tags($label)));
+                    $valueKey = strtolower(trim(wp_strip_all_tags($valueHtml)));
+                    if ($labelKey !== '' && $valueKey !== '' && isset($renderedAttrIndex["{$labelKey}|{$valueKey}"])) {
+                        continue;
+                    }
+
+                    if ($label !== '' && $valueHtml !== '') {
+                        $custom_attributes[] = ['label' => $label, 'value' => $valueHtml];
+                    }
+                }
+            }
+
+            // 3) Advanced Product Fields (wapf / apf)
+            foreach (['wapf', 'apf'] as $apfKey) {
+                if (!empty($cart_item[$apfKey]) && is_array($cart_item[$apfKey])) {
+                    foreach ($cart_item[$apfKey] as $entry) {
+                        if (!is_array($entry))
+                            continue;
+
+                        $label = CartAttributeHelper::cleanLabel($entry['label'] ?? $entry['name'] ?? '');
+                        $raw = $entry['display'] ?? ($entry['value'] ?? ($entry['values'] ?? $entry));
+                        $valueHtml = CartAttributeHelper::valueToHtml($raw);
+
+                        // duplicate check against variation attributes
+                        $labelKey = strtolower(trim(wp_strip_all_tags($label)));
+                        $valueKey = strtolower(trim(wp_strip_all_tags($valueHtml)));
+                        if ($labelKey !== '' && $valueKey !== '' && isset($renderedAttrIndex["{$labelKey}|{$valueKey}"])) {
+                            continue;
+                        }
+
+                        if ($label !== '' && $valueHtml !== '') {
+                            $custom_attributes[] = ['label' => $label, 'value' => $valueHtml];
+                        }
+                    }
+                }
+            }
+
+            // 4) RAW SWEEP of $cart_item for other custom meta (e.g., delivery_date)
+            foreach ($cart_item as $key => $val) {
+                if (!is_string($key))
+                    continue;
+                // Skip internals / containers / duplicates you already handle elsewhere
+                if (CartAttributeHelper::isReservedKey($key))
+                    continue;
+                if (in_array($key, ['product_id', 'variation_id', 'variation', 'data', 'data_hash', 'key', 'addons', 'wapf', 'apf'], true))
+                    continue;
+                if (is_object($val))
+                    continue;
+
+                $label = CartAttributeHelper::labelFromKey($key);
+                $valueHtml = CartAttributeHelper::valueToHtml($val);
+
+                // duplicate check against variation attributes
+                $labelKey = strtolower(trim(wp_strip_all_tags($label)));
+                $valueKey = strtolower(trim(wp_strip_all_tags($valueHtml)));
+                if ($labelKey !== '' && $valueKey !== '' && isset($renderedAttrIndex["{$labelKey}|{$valueKey}"])) {
+                    continue;
+                }
+
+                if ($label !== '' && $valueHtml !== '') {
+                    // avoid duplicates already added to custom_attributes
+                    $dup = false;
+                    foreach ($custom_attributes as $pair) {
+                        if (
+                            strtolower(trim(wp_strip_all_tags($pair['label']))) === $labelKey &&
+                            strtolower(trim(wp_strip_all_tags($pair['value']))) === $valueKey
+                        ) {
+                            $dup = true;
+                            break;
+                        }
+                    }
+                    if (!$dup) {
+                        $custom_attributes[] = ['label' => $label, 'value' => $valueHtml];
+                    }
+                }
+            }
+
+            // De-dupe
+            $attributes = array_values(array_unique($attributes, SORT_REGULAR));
+            $custom_attributes = array_values(array_unique($custom_attributes, SORT_REGULAR));
+
+            // Short description (HTML)
             $short = wp_kses_post(wp_trim_words($product->get_short_description(), 12, '…'));
 
-            // Subtotal (HTML, respects tax display settings)
+            // Subtotal (HTML)
             $subtotalHtml = apply_filters(
                 'woocommerce_cart_item_subtotal',
                 WC()->cart->get_product_subtotal($product, $qty),
@@ -103,13 +226,10 @@ class ReviewOrder extends Composer
                 $cart_item_key
             );
 
-            // Unit price (HTML, matches cart display mode)
-            $displayInclTax = WC()->cart->display_prices_including_tax();
-            if ($displayInclTax) {
-                $unit = wc_get_price_including_tax($product);
-            } else {
-                $unit = wc_get_price_excluding_tax($product);
-            }
+            // Unit price (HTML)
+            $unit = WC()->cart->display_prices_including_tax()
+                ? wc_get_price_including_tax($product)
+                : wc_get_price_excluding_tax($product);
             $unitHtml = wc_price($unit);
 
             $rowClass = esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key));
@@ -118,13 +238,13 @@ class ReviewOrder extends Composer
                 'id' => $cart_item_key,
                 'row_class' => $rowClass,
                 'quantity' => $qty,
-                'thumbnail' => wp_kses_post($thumbnail),          // HTML
-                'name' => wp_kses_post($nameHtml),           // HTML
-                'attributes' => $attributes,                       // array
-                'short_description' => $short,                            // HTML
-                'subtotal' => $subtotalHtml,                     // HTML
-                'unit_price' => $unitHtml,                         // HTML
-                // originals if you ever need them:
+                'thumbnail' => wp_kses_post($thumbnail), // HTML
+                'name' => wp_kses_post($nameHtml),  // HTML
+                'attributes' => $attributes,              // variation selections (plain text)
+                'custom_attributes' => $custom_attributes,       // all other meta (HTML; may include <a>)
+                'short_description' => $short,                   // HTML
+                'subtotal' => $subtotalHtml,            // HTML
+                'unit_price' => $unitHtml,                // HTML
                 '_cart_item' => $cart_item,
                 '_product' => $product,
             ];
