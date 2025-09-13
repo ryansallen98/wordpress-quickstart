@@ -14,3 +14,8 @@ namespace App;
 add_filter('excerpt_more', function () {
     return sprintf(' &hellip; <a href="%s">%s</a>', get_permalink(), __('Continued', 'wordpress-quickstart'));
 });
+
+
+add_filter( 'loop_shop_columns', function() {
+    return 6; // change to 2, 3, 4, etc.
+}, 20 );
