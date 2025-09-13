@@ -34,7 +34,8 @@ require $composer;
 Application::configure()
     ->withProviders([
         App\Providers\ThemeServiceProvider::class,
-        App\Providers\TgmpaServiceProvider::class
+        App\Providers\TgmpaServiceProvider::class,
+        App\Providers\WooCommerceServiceProvider::class,
     ])
     ->boot();
 
@@ -56,22 +57,6 @@ collect(['setup', 'filters', 'acf'])
             wp_die(
                 /* translators: %s is replaced with the relative file path */
                 sprintf(__('Error locating <code>%s</code> for inclusion.', 'wordpress-quickstart'), $file)
-            );
-        }
-    });
-
-collect(glob(__DIR__ . '/app/WooCommerce/*.php'))
-    ->map(function ($file) {
-        // Make the path relative to theme root, e.g. "app/WooCommerce/file.php"
-        return str_replace(get_theme_file_path() . '/', '', $file);
-    })
-    ->each(function ($file) {
-        if (! locate_template($file, true, true)) {
-            wp_die(
-                sprintf(
-                    __('Error locating <code>%s</code> for inclusion.', 'sage'),
-                    $file
-                )
             );
         }
     });
