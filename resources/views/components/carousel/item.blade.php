@@ -1,5 +1,6 @@
 @props([
   'index' => null,
+  'lazy' => false,
 ])
 
 @php
@@ -7,6 +8,7 @@
   $composed = $tw->merge(
     'shrink-0 basis-full',
     $attributes->get('class'),
+    $lazy ? 'relative' : ''
   );
 @endphp
 
@@ -30,5 +32,10 @@
     })()
   "
 >
+  <div class="lazy-load__spinner absolute inset-0 grid place-items-center bg-accent">
+      <span class="sr-only"> {{ __('Loading', 'wordpress-quickstart') }}</span>
+      <x-lucide-loader-circle class="animate-spin size-8 text-primary" aria-hidden="true"/>
+  </div>
+
   {{ $slot }}
 </div>

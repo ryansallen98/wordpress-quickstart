@@ -5,6 +5,8 @@
   // ['delay' => 5000, 'jump' => false, 'playOnInit' => true, 'stopOnInteraction' => true,
   //  'stopOnMouseEnter' => true, 'stopOnFocusIn' => true, 'stopOnLastSnap' => false]
   'autoplay' => false,
+  'lazy' => false,
+  'draggable' => true,
 ])
 
 @php
@@ -20,8 +22,9 @@
     slidesToScroll: 1,
     axis: '{{ $isVertical ? 'y' : 'x' }}',
     direction: '{{ $dir === 'rtl' ? 'rtl' : 'ltr' }}',
-    // IMPORTANT: pass autoplay as real JS, not a string
     autoplay: @js($autoplay),
+    draggable: @js((bool) $draggable),
+    lazy: @js($lazy), 
   })"
   x-init
   x-effect="() => () => destroy()"
