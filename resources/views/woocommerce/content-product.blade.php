@@ -19,7 +19,7 @@
     do_action('woocommerce_before_shop_loop_item');
   @endphp
 
-  <div class="overflow-hidden w-full h-fit rounded-lg shadow-md mb-4 relative">
+  <div class="mb-4 relative">
     @php
       /**
        * Hook: woocommerce_before_shop_loop_item_title.
