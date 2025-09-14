@@ -17,7 +17,7 @@
     {{-- New Badge --}}
     @if($is_new)
         <div class="flex flex-col items-end">
-            <div class="bg-blue-500 shadow-sm px-4 py-1 uppercase text-white font-bold text-xs">
+            <div class="bg-blue-500 shadow-sm px-8 py-1 uppercase text-white font-bold">
                 {{ esc_html__('New!', 'wordpress-quickstart') }}
             </div>
 
@@ -28,7 +28,7 @@
     {{-- Sale Badge --}}
     @if($product && $product->is_on_sale())
         <div class="flex flex-col items-end">
-            <div class="bg-red-500 shadow-sm px-4 py-1 uppercase text-white font-bold text-xs">
+            <div class="bg-red-500 shadow-sm px-8 py-1 uppercase text-white font-bold">
                 {{ esc_html__('Sale!', 'woocommerce') }}
             </div>
 
