@@ -3,14 +3,110 @@
     "title": "Mega Menu",
     "fields": [
         {
+            "key": "field_68c6ecc8982e3",
+            "label": "Is Sub Menu?",
+            "name": "is_sub_menu",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Only tick this is the menu is a sub menu item",
+            "default_value": 0,
+            "acfe_settings": "",
+            "acfe_validate": "",
+            "acfe_permissions": "",
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_68c6ee13e268e",
+            "label": "Is Mega Menu?",
+            "name": "is_mega_menu",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68c6ecc8982e3",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "acfe_settings": "",
+            "acfe_validate": "",
+            "acfe_permissions": "",
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_68c1f95e61341",
+            "label": "Is Button?",
+            "name": "is_button",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68c6ecc8982e3",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "acfe_settings": "",
+            "acfe_validate": "",
+            "acfe_permissions": "",
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
             "key": "field_68c1ed1439219",
             "label": "Description",
             "name": "description",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "",
+            "instructions": "This only applies when the parent is a Mega Menu",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68c6ecc8982e3",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -33,9 +129,17 @@
             "name": "is_featured",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "This only applies when the parent is a Mega Menu",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68c6ecc8982e3",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -57,9 +161,22 @@
             "name": "image",
             "aria-label": "",
             "type": "image",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
+            "instructions": "This only applies when the parent is a Mega Menu",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68c6ecc8982e3",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_68c1e664473f4",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -69,6 +186,8 @@
             "return_format": "array",
             "library": "all",
             "acfe_thumbnail": 0,
+            "acfe_settings": "",
+            "acfe_validate": "",
             "min_width": "",
             "min_height": "",
             "min_size": "",
@@ -76,32 +195,9 @@
             "max_height": "",
             "max_size": "",
             "mime_types": "",
-            "allow_in_bindings": 0,
-            "preview_size": "medium"
-        },
-        {
-            "key": "field_68c1f95e61341",
-            "label": "Is Button?",
-            "name": "is_button",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "acfe_settings": "",
-            "acfe_validate": "",
             "acfe_permissions": "",
             "allow_in_bindings": 0,
-            "ui": 0,
-            "ui_on_text": "",
-            "ui_off_text": ""
+            "preview_size": "medium"
         }
     ],
     "location": [
@@ -131,5 +227,5 @@
     "acfe_form": 1,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1757542783
+    "modified": 1757867697
 }
