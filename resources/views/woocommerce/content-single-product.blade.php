@@ -17,7 +17,7 @@
 
 <div id="product-{{ get_the_ID() }}" class="{{ esc_attr(implode(' ', (array) $product_classes)) }}">
 
-    <div class="grid grid-cols-[3fr_4fr] gap-16 mt-4">
+    <div class="grid lg:grid-cols-2 gap-16 mt-4">
         
         {{-- Before summary (sale flash, gallery) --}}
         <div class="relative">
