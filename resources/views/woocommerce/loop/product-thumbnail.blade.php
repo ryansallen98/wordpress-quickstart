@@ -7,6 +7,6 @@
   );
 @endphp
 
-<div class="overflow-hidden z-1 w-full">
+<div class="overflow-hidden z-1 w-full rounded-lg shadow-md">
   {!! $image !!}
 </div>
