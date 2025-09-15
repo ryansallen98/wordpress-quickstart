@@ -58,8 +58,8 @@ textarea.wapf-input {
   @apply mt-0;
 }
 
-.form-row label .required {
-  @apply text-destructive;
+.required {
+  @apply text-destructive no-underline;
 }
 
 .form-row-first,
