@@ -29,7 +29,6 @@ JS
  * Add custom svg arrow to Select2 fields
  */
 add_action('wp_enqueue_scripts', function () {
-  if (is_checkout() || is_account_page()) {
     // Render the Lucide Blade icon into a string
     // If you use blade-ui-kit/blade-icons, the svg() helper is available:
     $icon = svg('lucide-chevron-down')->toHtml();
@@ -54,5 +53,20 @@ jQuery(function($){
   });
 });
 JS, 'after');
-  }
+  
 }, 100);
+
+
+
+/**
+ * Add 'wc-enhanced-select' class to variation attribute dropdowns
+ */
+add_filter('woocommerce_dropdown_variation_attribute_options_args', function ($args) {
+    $args['class'] = trim(($args['class'] ?? '') . ' wc-enhanced-select2');
+    return $args;
+});
+
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_script('selectWoo'); // WooCommerce’s bundled Select2
+    wp_enqueue_style('select2');    // Select2 CSS (WooCommerce includes this handle)
+}, 20);

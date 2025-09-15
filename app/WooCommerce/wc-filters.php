@@ -31,5 +31,3 @@ add_filter('woocommerce_enqueue_styles', function ($styles) {
 //     }
 //     return $settings;
 // });
-
-
