@@ -23,12 +23,16 @@
     ];
 @endphp
 
-<div class="woocommerce-variation-add-to-cart variations_button mb-8">
+<div class="woocommerce-variation-add-to-cart variations_button">
 
     @php do_action('woocommerce_before_add_to_cart_button'); @endphp
 
+    <div class="woocommerce-variation single_variation text-right text-2xl font-semibold [&_.price]:inline-flex [&_.price]:mt-4" role="alert"
+        aria-relevant="additions">
+    </div>
+
     <div class="flex justify-between items-end">
-        <div class="flex flex-col gap-1">
+        <div class="flex flex-col gap-2">
             <label class="input-label">Quantity</label>
             @php do_action('woocommerce_before_add_to_cart_quantity'); @endphp
 
