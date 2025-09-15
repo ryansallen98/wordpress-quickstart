@@ -47,6 +47,7 @@
   @php do_action('woocommerce_after_quantity_input_field'); @endphp
 </div>
 
+@pushOnce('scripts')
 <script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('qtyComponent', (opts) => ({
@@ -54,7 +55,7 @@
       readonly: !!opts.readonly,
       min: Number(opts.min ?? 0),
       max: (opts.max && Number(opts.max) > 0) ? Number(opts.max) : null, // null = no max
-      step: Number(opts.step || 1),
+      step: Math.max(1, Number(opts.step || 1)), // enforce integer steps ≥ 1
 
       // state
       value: 0,
@@ -69,41 +70,125 @@
       },
 
       init() {
-        // initialize from input
         const i = this.$refs.input
-        this.value = Number(i.value || this.min || 1)
-
-        // if anything else changes the input, sync our state
-        i.addEventListener('change', () => {
-          this.value = Number(i.value || this.min || 1)
-        })
-        i.addEventListener('input', () => {
-          // keep buttons responsive while typing
-          this.value = Number(i.value || this.min || 0)
-        })
+        this.value = this._toInt(i.value ?? this.min ?? 1)
+        // Sync if other scripts change it (Woo, etc.)
+        i.addEventListener('change', () => { this.value = this._toInt(i.value ?? this.min ?? 1) })
+        i.addEventListener('input', () => { this.value = this._toInt(i.value ?? this.min ?? 0) })
       },
 
+      // --- Integer-only enforcement ---
+      onKeydown(e) {
+        if (this.readonly) return
+        const allowed = [
+          'Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'
+        ]
+        // Allow Ctrl/Meta combos (copy/paste, select all)
+        if (e.ctrlKey || e.metaKey) return
+        if (allowed.includes(e.key)) return
+        // Digits only
+        if (/^\d$/.test(e.key)) return
+        // Optional minus at start only if min < 0
+        if (e.key === '-' && this.min < 0) {
+          const el = e.target
+          const caretAtStart = el.selectionStart === 0
+          const noMinusYet = String(el.value).indexOf('-') === -1
+          if (caretAtStart && noMinusYet) return
+        }
+        // Block everything else (e, ., , +, etc.)
+        e.preventDefault()
+      },
+
+      onPaste(e) {
+        if (this.readonly) return
+        const text = (e.clipboardData || window.clipboardData).getData('text')
+        const cleaned = this._clean(text)
+        if (cleaned === '') {
+          e.preventDefault()
+          return
+        }
+        // Let it paste, then sanitize in onInput
+        // (Alternatively, preventDefault and insert cleaned manually)
+      },
+
+      onInput(e) {
+        if (this.readonly) return
+        const el = e.target
+        const cleaned = this._clean(el.value)
+        if (cleaned !== el.value) {
+          const pos = el.selectionStart
+          el.value = cleaned
+          // Try to keep caret position reasonable
+          el.setSelectionRange(pos - 1, pos - 1)
+        }
+        // Do not clamp yet—let user type; store numeric snapshot
+        const n = this._toInt(cleaned)
+        this.value = isNaN(n) ? this.value : n
+      },
+
+      onBlur() {
+        // On blur, normalise to step + clamp to min/max
+        const i = this.$refs.input
+        let n = this._toInt(i.value)
+        if (isNaN(n)) n = this.min || 1
+        n = this._snapToStep(this._clamp(n))
+        i.value = String(n)
+        this.value = n
+        i.dispatchEvent(new Event('change', { bubbles: true }))
+      },
+
+      // --- Buttons (unchanged) ---
       dec() {
         if (this.decDisabled) return
         const i = this.$refs.input
         if (!i.readOnly) {
           i.stepDown()
-          i.dispatchEvent(new Event('change', { bubbles: true }))
-          this.value = Number(i.value)
-          i.focus()
+          this._postStep(i)
         }
       },
-
       inc() {
         if (this.incDisabled) return
         const i = this.$refs.input
         if (!i.readOnly) {
           i.stepUp()
-          i.dispatchEvent(new Event('change', { bubbles: true }))
-          this.value = Number(i.value)
-          i.focus()
+          this._postStep(i)
         }
+      },
+      _postStep(i) {
+        // Make sure it’s integer + snapped
+        let n = this._toInt(i.value)
+        n = this._snapToStep(this._clamp(n))
+        i.value = String(n)
+        this.value = n
+        i.dispatchEvent(new Event('change', { bubbles: true }))
+        i.focus()
+      },
+
+      // --- helpers ---
+      _toInt(v) {
+        const m = String(v ?? '').match(/^-?\d+/)
+        return m ? parseInt(m[0], 10) : NaN
+      },
+      _clean(v) {
+        v = String(v ?? '')
+        // Keep optional leading minus if min < 0
+        const allowMinus = this.min < 0 && v.startsWith('-')
+        const digits = v.replace(/\D+/g, '')
+        return allowMinus ? ('-' + digits) : digits
+      },
+      _clamp(n) {
+        if (this.max !== null) n = Math.min(n, this.max)
+        n = Math.max(n, this.min ?? n)
+        return n
+      },
+      _snapToStep(n) {
+        // Snap to the nearest lower step from the base (min or 0)
+        const base = Number.isFinite(this.min) ? this.min : 0
+        const diff = n - base
+        const snapped = base + Math.floor(diff / this.step) * this.step
+        return snapped
       },
     }))
   })
 </script>
+@endpushOnce
