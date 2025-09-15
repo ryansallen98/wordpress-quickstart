@@ -28,7 +28,7 @@
               @endphp
         </div>
 
-        <div class="summary entry-summary">
+        <div class="summary entry-summary max-w-lg mx-auto">
             @php
                 // @hooked woocommerce_template_single_title - 5
                 // @hooked woocommerce_template_single_rating - 10
