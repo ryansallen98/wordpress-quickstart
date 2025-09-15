@@ -49,6 +49,7 @@
 
   <x-toast />
 
+  @stack('modals')
   @stack('scripts')
   @php(do_action('get_footer'))
   @php(wp_footer())
