@@ -4,5 +4,5 @@
   aria-current="page"
   class="text-foreground font-normal"
 >
-  {{ $slot }}
+  {!! $slot !!}
 </span>
