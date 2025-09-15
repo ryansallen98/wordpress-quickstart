@@ -2,7 +2,7 @@
 <div
   x-data="toastCenter()"
   x-init="init()"
-  class="pointer-events-none fixed right-4 bottom-4 z-[9999] w-[calc(100vw-2rem)] space-y-3 sm:w-96"
+  class="pointer-events-none fixed right-4 bottom-4 z-[99] w-[calc(100vw-2rem)] space-y-3 sm:w-96"
   aria-live="polite"
   aria-atomic="true"
 >
