@@ -1,6 +1,6 @@
 @php
   // translators: %s: Quantity.
-  $label = ! empty($args['product_name'])
+  $label = !empty($args['product_name'])
     ? sprintf(esc_html__('%s quantity', 'woocommerce'), wp_strip_all_tags($args['product_name']))
     : esc_html__('Quantity', 'woocommerce');
 
@@ -14,59 +14,32 @@
     {{ esc_html($label) }}
   </label>
 
-  <div
-    x-data="qtyComponent({
+  <div x-data="qtyComponent({
       readonly: {{ $is_readonly ? 'true' : 'false' }},
       min: {{ json_encode($min_value) }},
       max: {{ json_encode($max_value) }},   // 0 or '' means no max
       step: {{ json_encode($step ?: '1') }}
-    })"
-    class="flex shadow-sm rounded-md"
-  >
-    <button
-      class="btn btn-outline btn-icon rounded-r-none shadow-none!"
-      type="button"
-      x-on:click="dec()"
-      x-bind:disabled="decDisabled"
-      x-bind:aria-disabled="decDisabled ? 'true' : 'false'"
-    >
-      <x-lucide-minus/>
+    })" class="flex shadow-sm rounded-md">
+    <button class="btn btn-outline btn-icon rounded-r-none shadow-none! !border-r-0" type="button" x-on:click="dec()"
+      x-bind:disabled="decDisabled" x-bind:aria-disabled="decDisabled ? 'true' : 'false'">
+      <x-lucide-minus />
       <span class="sr-only">{{ esc_html__('Decrease quantity', 'woocommerce') }}</span>
     </button>
 
-    <input
-      x-ref="input"
-      type="{{ esc_attr($type) }}"
-      @if($is_readonly) readonly="readonly" @endif
+    <input x-ref="input" type="{{ esc_attr($type) }}" @if($is_readonly) readonly="readonly" @endif
       id="{{ esc_attr($input_id) }}"
-      class="{{ esc_attr(implode(' ', (array) $classes)) }} text-center !rounded-none !border-l-0 !border-r-0 shadow-none!"
-      name="{{ esc_attr($input_name) }}"
-      value="{{ esc_attr($input_value) }}"
-      aria-label="{{ esc_attr__('Product quantity', 'woocommerce') }}"
+      class="{{ esc_attr(implode(' ', (array) $classes)) }} text-center !rounded-none shadow-none! max-w-[50px] relative z-1"
+      name="{{ esc_attr($input_name) }}" value="{{ esc_attr($input_value) }}"
+      aria-label="{{ esc_attr__('Product quantity', 'woocommerce') }}" style="-moz-appearance: textfield;"
+      x-on:keydown="onKeydown($event)" x-on:paste="onPaste($event)" x-on:input="onInput($event)" x-on:blur="onBlur()"
+      x-on:wheel.prevent inputmode="numeric" pattern="[0-9]*" @if(in_array($type, ['text', 'search', 'tel', 'url', 'email', 'password'], true)) size="4" @endif min="{{ esc_attr($min_value) }}" @if(0 < (int) $max_value)
+      max="{{ esc_attr($max_value) }}" @endif @unless($is_readonly) step="{{ esc_attr($step) }}"
+        placeholder="{{ esc_attr($placeholder) }}" inputmode="{{ esc_attr($inputmode) }}"
+      autocomplete="{{ esc_attr(isset($autocomplete) ? $autocomplete : 'on') }}" @endunless />
 
-      @if(in_array($type, ['text','search','tel','url','email','password'], true))
-        size="4"
-      @endif
-
-      min="{{ esc_attr($min_value) }}"
-      @if(0 < (int) $max_value) max="{{ esc_attr($max_value) }}" @endif
-
-      @unless($is_readonly)
-        step="{{ esc_attr($step) }}"
-        placeholder="{{ esc_attr($placeholder) }}"
-        inputmode="{{ esc_attr($inputmode) }}"
-        autocomplete="{{ esc_attr(isset($autocomplete) ? $autocomplete : 'on') }}"
-      @endunless
-    />
-
-    <button
-      class="btn btn-outline btn-icon rounded-l-none shadow-none!"
-      type="button"
-      x-on:click="inc()"
-      x-bind:disabled="incDisabled"
-      x-bind:aria-disabled="incDisabled ? 'true' : 'false'"
-    >
-      <x-lucide-plus/>
+    <button class="btn btn-outline btn-icon rounded-l-none shadow-none! !border-l-0" type="button" x-on:click="inc()"
+      x-bind:disabled="incDisabled" x-bind:aria-disabled="incDisabled ? 'true' : 'false'">
+      <x-lucide-plus />
       <span class="sr-only">{{ esc_html__('Increase quantity', 'woocommerce') }}</span>
     </button>
   </div>
