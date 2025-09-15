@@ -115,6 +115,51 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
+@layer utilities {
+  .prose {
+    /* base text + headings */
+    --tw-prose-body: var(--color-foreground);
+    --tw-prose-headings: var(--color-foreground);
+    --tw-prose-lead: color-mix(in oklab, var(--color-foreground) 85%, transparent);
+
+    /* links */
+    --tw-prose-links: var(--color-primary);
+    --tw-prose-links-hover: color-mix(in oklab, var(--color-primary) 85%, black);
+
+    /* emphasis */
+    --tw-prose-bold: var(--color-foreground);
+    --tw-prose-counters: var(--color-muted-foreground);
+    --tw-prose-bullets: var(--color-muted-foreground);
+
+    /* rules / borders */
+    --tw-prose-hr: var(--color-border);
+    --tw-prose-quote-borders: var(--color-border);
+    --tw-prose-th-borders: var(--color-border);
+    --tw-prose-td-borders: var(--color-border);
+
+    /* blockquotes */
+    --tw-prose-quotes: var(--color-foreground);
+
+    /* captions / small text */
+    --tw-prose-captions: var(--color-muted-foreground);
+
+    /* code & preformatted */
+    --tw-prose-code: var(--color-foreground);
+    --tw-prose-pre-code: var(--color-foreground);
+    --tw-prose-pre-bg: var(--color-muted);
+    --tw-prose-pre-border: var(--color-border);
+    --tw-prose-kbd: var(--color-foreground);
+
+    /* figures / marks */
+    --tw-prose-figcaption: var(--color-muted-foreground);
+    --tw-prose-quotes: var(--color-foreground);
+    --tw-prose-quote-borders: var(--color-border);
+    --tw-prose-italic: var(--color-foreground);
+    --tw-prose-mark: var(--color-warning);
+    --tw-prose-mark-bg: color-mix(in oklab, var(--color-warning) 20%, transparent);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -135,3 +180,4 @@
 * {
   @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive outline-none focus-visible:ring-[3px];
 }
+
