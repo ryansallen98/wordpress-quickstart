@@ -78,21 +78,6 @@ do_action('woocommerce_before_add_to_cart_form'); ?>
 
 <?php do_action('woocommerce_after_add_to_cart_form'); ?>
 
-@pushOnce('styles')
-<style>
-/* Optional: keep SelectWoo control height consistent (adjust 42px if your inputs differ) */
-.select2-container .select2-selection--single { height: 42px; }
-.select2-container--default .select2-selection--single .select2-selection__rendered { line-height: 42px; }
-.select2-container--default .select2-selection--single .select2-selection__arrow { height: 42px; }
-
-/* Make sure dropdown floats above modals/drawers; bump if your stack needs more */
-.select2-container.select2-container--open { z-index: 9999; }
-
-/* If you see page shift when opening, this prevents scrollbar jump on some themes */
-html.select2-open { overflow: visible !important; }
-</style>
-@endPushOnce
-
 @pushOnce('scripts')
 <script>
 jQuery(function ($) {
