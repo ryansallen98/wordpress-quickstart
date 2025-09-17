@@ -8,21 +8,21 @@
   ];
 @endphp
 
-<div class="rounded-lg bg-card border shadow-sm">
+<div class="rounded-lg bg-card border shadow-sm border-b-0">
   <div class="px-5 py-4 border-b flex items-center justify-between">
     <h2 class="text-base font-semibold">{!! __('Recent orders', 'woocommerce') !!}</h2>
     <a href="{{ $links['orders'] }}" class="btn btn-link btn-sm h-auto p-0">{!! __('See all', 'woocommerce') !!}</a>
   </div>
 
   @if(!empty($recentOrders))
-    <div class="px-5 py-4 overflow-x-auto">
-      <table class="min-w-full text-sm">
-        <thead class="text-left">
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead class="thead">
           <tr class="border-b">
             @foreach($orderTableCols as $col)
-              <th class="py-2 pr-4">{{ $col['label'] }}</th>
+              <th class="th">{{ $col['label'] }}</th>
             @endforeach
-            <th class="py-2"></th>
+            <th class="th"></th>
           </tr>
         </thead>
         <tbody>
@@ -34,9 +34,9 @@
               $items = $order->get_item_count() - $order->get_item_count_refunded();
             @endphp
 
-            <tr class="border-b">
+            <tr>
               @foreach($orderTableCols as $col)
-                <td class="py-3 pr-4">
+                <td class="td">
                   @switch($col['key'])
                     @case('order')
                       <a class="font-medium underline" href="{{ $order->get_view_order_url() }}">#{{ $order->get_order_number() }}</a>
@@ -58,7 +58,7 @@
                 </td>
               @endforeach
 
-              <td class="py-3">
+              <td class="td">
                 <div class="flex justify-end gap-2">
                 <a href="{{ $order->get_view_order_url() }}" class="btn btn-outline btn-sm">{!! __('View', 'woocommerce') !!}</a>
                 @if($order->has_status(apply_filters('woocommerce_valid_order_statuses_for_reorder', ['completed','processing','on-hold'], $order)))
