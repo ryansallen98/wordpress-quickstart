@@ -15,17 +15,25 @@
     </div>
   </div>
   <div class="w-full">
-    <div class="bg-background sticky top-0 z-10 flex gap-4 border-b px-4 py-2">
+    <div class="bg-background sticky top-0 z-10 flex gap-4 border-b px-8 py-2">
       <button class="btn btn-outline btn-icon">
         <x-lucide-panel-left aria-hidden="true" /><span
           class="sr-only">{{ __('Toggle navigation', 'wordpress-quickstart') }}</span>
       </button>
 
       @include('partials.primary-navigation')
+
+      <div class="flex flex-row">
+        <x-theme.toggle />
+
+        <a class="btn btn-ghost btn-icon" href="{{ get_permalink(get_option('woocommerce_cart_page_id')) }}">
+          <x-heroicon-s-shopping-bag class="size-5" />
+          <span class="sr-only">{{ __('Cart', 'wordpress-quickstart') }}</span>
+        </a>
+      </div>
     </div>
 
     <div class="p-8">
-      <h1 class="text-2xl font-bold mb-6">{{ $title }}</h1>
       @php
         do_action('woocommerce_account_content');
       @endphp
