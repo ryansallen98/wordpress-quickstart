@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-xl font-semibold">{!! __('Best sellers', 'woocommerce') !!}</h2>
                 <a href="{{ $links['shop'] }}" class="btn btn-ghost btn-sm">{!! __('Browse shop', 'woocommerce') !!}
-                    <x-lucide-shopping-bag aria-hidden="true" />
+                    <x-lucide-store aria-hidden="true" />
                 </a>
 
             </div>
