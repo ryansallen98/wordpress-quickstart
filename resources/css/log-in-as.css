@@ -1,0 +1,11 @@
+.login-as-user {
+    @apply bottom-4! top-auto! w-fit! right-4! left-auto! text-xs! shadow-lg rounded-lg overflow-hidden
+}
+
+.login-as-user-inner {
+    @apply border-0!
+}
+
+.login-as-user-content {
+    @apply flex! flex-col! items-end!
+}
