@@ -16,6 +16,7 @@ const componentLoaders: Record<string, () => Promise<{ default: any }>> = {
   accordionComponent: () => import('./components/accordion'),
   carouselComponent: () => import('./components/carousel'),
   selectComponent: () => import('./components/select'),
+  modalComponent: () => import('./components/modal'),
 };
 
 // Extend Window interface for Alpine
