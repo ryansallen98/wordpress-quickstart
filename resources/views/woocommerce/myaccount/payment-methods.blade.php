@@ -7,7 +7,7 @@
 
 @php do_action('woocommerce_before_account_payment_methods', $has_methods); @endphp
 
-<div class="flex items-start justify-between mb-6">
+<div class="flex flex-col md:flex-row items-start justify-between mb-6 gap-4">
     <h1 class="text-2xl font-bold">{!! $title !!}</h1>
 
     @if (WC()->payment_gateways->get_available_payment_gateways())

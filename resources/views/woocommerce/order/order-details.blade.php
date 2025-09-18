@@ -67,7 +67,7 @@
             @if (!empty($actions))
                 <tfoot>
                     <tr>
-                        <th class="order-actions--heading" colspan="2" class="text-right pr-1 td">{{ __('Actions', 'woocommerce') }}:</th>
+                        <th class="order-actions--heading" colspan="2" class="text-right! pr-1 td" style="text-align:right; padding-right: 16px;">{{ __('Actions', 'woocommerce') }}:</th>
                         <td class="td">
                             @php $wp_button_class = wc_wp_theme_get_element_class_name('button') ? ' ' . wc_wp_theme_get_element_class_name('button') : ''; @endphp
                             @foreach ($actions as $key => $action)

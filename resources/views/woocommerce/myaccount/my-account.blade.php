@@ -15,13 +15,15 @@
     </div>
   </div>
   <div class="w-full">
-    <div class="bg-background sticky top-0 z-10 flex gap-4 border-b px-8 py-2">
+    <div class="bg-background sticky top-0 z-10 flex gap-4 border-b px-4 xl:px-8 py-2 justify-between">
       <button class="btn btn-outline btn-icon">
         <x-lucide-panel-left aria-hidden="true" /><span
           class="sr-only">{{ __('Toggle navigation', 'wordpress-quickstart') }}</span>
       </button>
 
-      @include('partials.primary-navigation')
+      <div class="hidden 2xl:flex w-full">
+        @include('partials.primary-navigation')
+      </div>
 
       <div class="flex flex-row">
         <x-theme.toggle />
@@ -33,7 +35,7 @@
       </div>
     </div>
 
-    <div class="p-8">
+    <div class="p-4 xl:p-8">
       @php
         do_action('woocommerce_account_content');
       @endphp

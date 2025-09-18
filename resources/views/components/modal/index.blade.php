@@ -44,7 +44,7 @@
             <div class="flex items-start justify-between gap-4">
                 <h2
                     :id="titleId"
-                    class="text-lg font-semibold leading-6"
+                    class="text-lg font-semibold leading-6 whitespace-normal"
                 >
                     {{ $title ?? '' }}
                 </h2>

@@ -6,7 +6,7 @@
 @if ($available_gateways)
     <div>
         <div>
-            <div class="pb-4 border-b border-border flex items-start justify-between">
+            <div class="pb-4 border-b border-border flex md:flex-row flex-col gap-4 items-start justify-between">
 
                 <div>
                     <h2 class="text-2xl font-semibold tracking-tight text-card-foreground mb-2">

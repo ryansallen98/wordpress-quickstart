@@ -7,9 +7,9 @@
 }
 
 .th {
-    @apply py-2 px-4 border-b;
+    @apply py-2 px-4 border-b whitespace-nowrap;
 }
 
 .td {
-    @apply px-4 py-2 border-b;
+    @apply px-4 py-2 border-b whitespace-nowrap;
 }
