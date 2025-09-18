@@ -36,7 +36,7 @@
     @click.self="close()"           {{-- ← add this --}}
 >
     <div
-        class="w-full max-w-lg rounded-lg bg-card p-6 shadow-xl outline-none"
+        class="w-full max-w-lg rounded-lg bg-card p-6 shadow-xl outline-none whitespace-normal"
         @click.stop                   {{-- keep clicks inside from bubbling --}}
         x-ref="dialog"
         tabindex="-1"
