@@ -1,6 +1,6 @@
-<section class="woocommerce-order-downloads">
+<section class="woocommerce-order-downloads mb-6">
   @isset($show_title)
-    <h2 class="woocommerce-order-downloads__title">{{ __('Downloads', 'woocommerce') }}</h2>
+    <h2 class="woocommerce-order-downloads__title text-xl font-bold mb-2">{{ __('Downloads', 'woocommerce') }}</h2>
   @endisset
     <div class="rounded-lg overflow-auto border border-b-0 shadow-sm">
         <table class="woocommerce-table woocommerce-table--order-downloads shop_table shop_table_responsive order_details table">
@@ -39,6 +39,7 @@
 
                         @case('download-file')
                         <a href="{!! esc_url($download['download_url']) !!}" class="woocommerce-MyAccount-downloads-file button alt">
+                            <x-lucide-download aria-hidden="true" />
                             {!! esc_html($download['download_name']) !!}
                         </a>
                         @break

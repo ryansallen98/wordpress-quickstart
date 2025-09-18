@@ -13,7 +13,7 @@
     $v_in_stock = $variation->is_in_stock();
 @endphp
 
-<tr class="wcsm-variation bg-muted/50" data-parent="<?php echo esc_attr($parent_id); ?>" aria-hidden="true">
+<tr class="wcsm-variation bg-muted/20" data-parent="<?php echo esc_attr($parent_id); ?>" aria-hidden="true">
     <input type="hidden" name="wcsm_ids[]" value="<?php echo esc_attr($vid); ?>" />
     <td class="py-2 border-b"></td>
     <td class="px-4 py-2 border-b">
