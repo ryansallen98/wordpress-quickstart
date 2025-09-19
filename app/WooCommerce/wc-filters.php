@@ -13,21 +13,30 @@ add_filter('woocommerce_enqueue_styles', function ($styles) {
   return [];
 });
 
-// /**
-//  * Force disable AJAX add-to-cart on archives
-//  */
-// add_filter('pre_option_woocommerce_enable_ajax_add_to_cart', function ($value) {
-//     return 'no';
-// });
+/**
+ * Customize WooCommerce Mini Cart buttons
+ */
+add_action('init', function () {
+  // Remove default buttons
+  remove_action('woocommerce_widget_shopping_cart_buttons', 'woocommerce_widget_shopping_cart_button_view_cart', 10);
+  remove_action('woocommerce_widget_shopping_cart_buttons', 'woocommerce_widget_shopping_cart_proceed_to_checkout', 20);
 
-// /**
-//  * Remove the AJAX add-to-cart checkbox from WooCommerce settings
-//  */
-// add_filter('woocommerce_product_settings', function ($settings) {
-//     foreach ($settings as $key => $setting) {
-//         if (isset($setting['id']) && 'woocommerce_enable_ajax_add_to_cart' === $setting['id']) {
-//             unset($settings[$key]);
-//         }
-//     }
-//     return $settings;
-// });
+  // Add custom buttons back
+  add_action('woocommerce_widget_shopping_cart_buttons', function () {
+    // Only show "View cart" if NOT on the cart page
+    if (!is_cart()) {
+      $cart_url = wc_get_cart_url();
+      echo '<a href="' . esc_url($cart_url) . '" class="btn btn-outline btn-lg flex-1">'
+        . svg('lucide-shopping-cart')->toHtml()
+        . esc_html__('View cart', 'woocommerce')
+        . '</a>';
+    }
+
+    // Always show "Checkout"
+    $checkout_url = wc_get_checkout_url();
+    echo '<a href="' . esc_url($checkout_url) . '" class="btn btn-primary btn-lg flex-1">'
+      . svg('lucide-credit-card')->toHtml()
+      . esc_html__('Checkout', 'woocommerce')
+      . '</a>';
+  }, 10);
+});

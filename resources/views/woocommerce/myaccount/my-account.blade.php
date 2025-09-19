@@ -27,11 +27,7 @@
 
       <div class="flex flex-row">
         <x-theme.toggle />
-
-        <a class="btn btn-ghost btn-icon" href="{{ get_permalink(get_option('woocommerce_cart_page_id')) }}">
-          <x-heroicon-s-shopping-bag class="size-5" />
-          <span class="sr-only">{{ __('Cart', 'wordpress-quickstart') }}</span>
-        </a>
+        @include('woocommerce.partials.cart')
       </div>
     </div>
 
