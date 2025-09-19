@@ -31,11 +31,11 @@
     @apply bg-popover border border-input rounded-md shadow-lg;
 }
 
-.select2-dropdown--below {
+.select2-dropdown.select2-dropdown--below {
     @apply border-t-[1px]! rounded-md! border-border! mt-1;
 }
 
-.select2-dropdown--above {
+.select2-dropdown.select2-dropdown--above {
     @apply border-b-[1px]! rounded-md! border-border! -mt-1!;
 }
 
