@@ -35,7 +35,10 @@ Application::configure()
     ->withProviders([
         App\Providers\ThemeServiceProvider::class,
         App\Providers\TgmpaServiceProvider::class,
+
+        // WooCommerce
         App\Providers\WooCommerceServiceProvider::class,
+        App\Providers\WooCommerceProductSearchServiceProvider::class,
     ])
     ->boot();
 
