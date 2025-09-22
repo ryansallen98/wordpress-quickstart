@@ -7,6 +7,7 @@
   'autoplay' => false,
   'lazy' => false,
   'draggable' => true,
+  'align' => 'start', 
 ])
 
 @php
@@ -18,7 +19,7 @@
   {{ $attributes->merge(['class' => $composed]) }}
   x-data="carouselComponent({
     loop: true,
-    align: 'start',
+    align: '{{ $align }}',
     slidesToScroll: 1,
     axis: '{{ $isVertical ? 'y' : 'x' }}',
     direction: '{{ $dir === 'rtl' ? 'rtl' : 'ltr' }}',
