@@ -315,60 +315,140 @@ class ReviewOrder extends Composer
         // Shipping (if shown)
         if ($cart->needs_shipping() && $cart->show_shipping()) {
             $packages = \WC()->shipping()->get_packages();
+            $packageCount = is_array($packages) ? count($packages) : 0;
+
+            // Only show contents when there are multiple packages (override via filter if needed)
+            $showContents = apply_filters('theme/show_shipping_contents', $packageCount > 1, $packages);
+
             $chosen = \WC()->session ? (array) \WC()->session->get('chosen_shipping_methods', []) : [];
-            $has_rates = false;
-            $has_chosen = false;
-            $chosen_cost = null;
+
+            // Collect notes (package + rate meta)
+            $collect_notes = static function (array $packageArr, $rateObj = null): string {
+                $notes = [];
+
+                foreach (['note', 'notes', 'shipping_note', 'shipping_notes', 'description', 'desc'] as $k) {
+                    if (!empty($packageArr[$k]) && is_string($packageArr[$k])) {
+                        $notes[] = wp_strip_all_tags($packageArr[$k]);
+                    }
+                }
+                if (!empty($packageArr['meta']) && is_array($packageArr['meta'])) {
+                    foreach ($packageArr['meta'] as $k => $v) {
+                        if (in_array($k, ['note', 'notes', 'description', 'desc'], true) && is_string($v) && $v !== '') {
+                            $notes[] = wp_strip_all_tags($v);
+                        }
+                    }
+                }
+
+                if ($rateObj instanceof \WC_Shipping_Rate && method_exists($rateObj, 'get_meta_data')) {
+                    foreach ((array) $rateObj->get_meta_data() as $meta) {
+                        $key = null;
+                        $val = null;
+
+                        if (is_object($meta) && method_exists($meta, 'get_data')) {
+                            $data = (array) $meta->get_data(); // ['key'=>, 'value'=>]
+                            $key = $data['key'] ?? null;
+                            $val = $data['value'] ?? null;
+                        } elseif (is_array($meta)) {
+                            $key = $meta['key'] ?? null;
+                            $val = $meta['value'] ?? null;
+                        } else {
+                            $key = is_object($meta) && isset($meta->key) ? $meta->key : null;
+                            $val = is_object($meta) && isset($meta->value) ? $meta->value : null;
+                        }
+
+                        if ($key && in_array($key, ['note', 'notes', 'description', 'desc'], true) && !empty($val)) {
+                            $notes[] = wp_strip_all_tags((string) $val);
+                        }
+                    }
+                }
+
+                $notes = array_values(array_unique(array_filter(array_map('trim', $notes))));
+                return implode(' ', $notes);
+            };
+
+            // Build <ul class="woocommerce-shipping-contents">…</ul>
+            $build_contents_html = static function (array $packageArr): string {
+                if (empty($packageArr['contents']) || !is_array($packageArr['contents']))
+                    return '';
+                $items = [];
+                foreach ($packageArr['contents'] as $cart_item_key => $cart_item) {
+                    $qty = (int) ($cart_item['quantity'] ?? 0);
+                    $product = $cart_item['data'] ?? null;
+                    if ($qty < 1 || !($product instanceof \WC_Product))
+                        continue;
+
+                    $base_name = $product->get_name();
+                    $name_html = apply_filters('woocommerce_cart_item_name', $base_name, $cart_item, $cart_item_key);
+                    $items[] = sprintf('%s × %d', wp_kses_post($name_html), $qty);
+                }
+                if (!$items)
+                    return '';
+
+                return '<ul class="woocommerce-shipping-contents"><li>'
+                    . implode('</li><li>', $items)
+                    . '</li></ul>';
+            };
 
             foreach ($packages as $i => $package) {
                 $rates = isset($package['rates']) ? $package['rates'] : [];
-                if (!empty($rates)) {
-                    $has_rates = true;
-                }
-                if (isset($chosen[$i], $rates[$chosen[$i]])) {
-                    $has_chosen = true;
+                $has_rates = !empty($rates);
+                $chosen_id = $chosen[$i] ?? '';
+                $valueHtml = '';
+                $notes_text = ''; // plain text only
+                $contents = ''; // HTML list (only when $showContents)
+
+                $package_label = apply_filters(
+                    'woocommerce_shipping_package_name',
+                    sprintf(esc_html__('Shipping %d', 'woocommerce'), $i + 1),
+                    $i,
+                    $package
+                );
+
+                if ($has_rates && $chosen_id && isset($rates[$chosen_id])) {
                     /** @var \WC_Shipping_Rate $rate */
-                    $rate = $rates[$chosen[$i]];
-                    $chosen_cost = (float) $rate->get_cost();
-                }
-            }
+                    $rate = $rates[$chosen_id];
+                    $amount = (float) $rate->get_cost();
+                    if ($cart->display_prices_including_tax()) {
+                        $amount += array_sum((array) $rate->get_taxes());
+                    }
+                    $valueHtml = \wc_price($amount);
+                    $package_label = esc_html($rate->get_label());
 
-            // Amount respecting tax display
-            $amount = (float) $cart->get_shipping_total();
-            if ($cart->display_prices_including_tax()) {
-                $amount += (float) $cart->get_shipping_tax_total();
-            }
-
-            // A usable amount exists if > 0 or a chosen method with 0.00 (free)
-            $has_amount = ($amount > 0) || ($has_chosen && $chosen_cost === 0.0);
-            $valueHtml = $has_amount ? \wc_price($amount) : \esc_html__('', 'woocommerce');
-
-            // Build description: move “no shipping” / guidance text here
-            $desc = '';
-            if (!$has_rates) {
-                if (\function_exists('\wc_no_shipping_available_html')) {
-                    // Prefer checkout version, strip tags for plain text
-                    $desc = \wp_strip_all_tags(\wc_no_shipping_available_html($packages[0] ?? []));
-                } elseif (\function_exists('\wc_cart_no_shipping_available_html')) {
-                    // Fallback to cart message if available
-                    $desc = \wp_strip_all_tags(\wc_cart_no_shipping_available_html());
+                    $notes_text = $collect_notes($package, $rate); // plain text
+                    if ($showContents) {
+                        $contents = $build_contents_html($package);  // HTML
+                    }
                 } else {
-                    $desc = \esc_html__('There are no shipping options available.', 'woocommerce');
-                }
-            } elseif ($has_rates && !$has_chosen) {
-                $desc = \esc_html__('Select a shipping method to see the price.', 'woocommerce');
-            }
+                    // Guidance when not chosen / no rates
+                    if (!$has_rates) {
+                        if (\function_exists('\wc_no_shipping_available_html')) {
+                            $notes_text = wp_strip_all_tags(\wc_no_shipping_available_html($package));
+                        } elseif (\function_exists('\wc_cart_no_shipping_available_html')) {
+                            $notes_text = wp_strip_all_tags(\wc_cart_no_shipping_available_html());
+                        } else {
+                            $notes_text = esc_html__('There are no shipping options available.', 'woocommerce');
+                        }
+                    } else {
+                        $notes_text = esc_html__('Select a shipping method to see the price.', 'woocommerce');
+                    }
 
-            $out[] = (object) [
-                'key' => 'shipping',
-                'type' => 'shipping',
-                'label' => \esc_html__('Shipping', 'woocommerce'),
-                'value' => $valueHtml,   // price or "N/A"
-                'prefix' => '',
-                'isCoupon' => false,
-                'isShipping' => true,
-                'description' => $desc,        // plain text; your Blade prints this under the row
-            ];
+                    if ($showContents) {
+                        $contents = $build_contents_html($package);
+                    }
+                }
+
+                $out[] = (object) [
+                    'key' => 'shipping_' . $i,
+                    'type' => 'shipping',
+                    'label' => $package_label,
+                    'value' => $valueHtml, // HTML
+                    'prefix' => '',
+                    'isCoupon' => false,
+                    'isShipping' => true,
+                    'description' => $notes_text,                          // plain text
+                    'contents_html' => $showContents ? wp_kses_post($contents) : '', // HTML (multi-package only)
+                ];
+            }
         }
 
         // Fees

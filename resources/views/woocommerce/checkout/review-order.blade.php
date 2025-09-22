@@ -1,6 +1,4 @@
-<div
-  class="shop_table woocommerce-checkout-review-order-table mb-4 flex flex-col gap-4"
->
+<div class="shop_table woocommerce-checkout-review-order-table mb-4 flex flex-col gap-4">
   @php
     do_action('woocommerce_review_order_before_cart_contents');
   @endphp
@@ -17,14 +15,13 @@
   @endphp
 
   <x-separator />
-
   @include('woocommerce.checkout.partials.form-coupon-proxy')
 
-  @include(
-    'woocommerce.partials.totals',
-    [
-      'subtotals' => $subtotals,
-      'order_total' => $order_total,
-    ]
-  )
+@include(
+  'woocommerce.partials.totals',
+  [
+    'subtotals' => $subtotals,
+    'order_total' => $order_total,
+  ]
+)
 </div>
