@@ -3,7 +3,7 @@
 
   $image = $product->get_image(
     'woocommerce_thumbnail',
-    ['class' => 'group-hover/product-link:scale-105 transition-transform duration-200 ease-in-out mb-0! w-full aspect-square'], // add your classes here
+    ['class' => 'group-hover/product-link:scale-105 transition-transform duration-200 ease-in-out mb-0! w-full aspect-square min-w-36'], // add your classes here
   );
 @endphp
 
