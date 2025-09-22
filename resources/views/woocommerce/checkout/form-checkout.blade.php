@@ -70,6 +70,15 @@
           </div>
         </div>
 
+              {{-- Shipping Debug --}}
+      {{-- @if (WC()->cart->needs_shipping() && WC()->cart->show_shipping())
+        @php do_action('woocommerce_review_order_before_shipping'); @endphp
+
+        {!! wc_cart_totals_shipping_html() !!}
+
+        @php do_action('woocommerce_review_order_after_shipping'); @endphp
+      @endif --}}
+
         @php
           do_action('woocommerce_checkout_after_customer_details');
         @endphp
