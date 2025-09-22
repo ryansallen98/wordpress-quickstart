@@ -14,43 +14,45 @@ class MiniCart extends Composer
 
         return [
             'list_class' => $args['list_class'] ?? '',
-            'items'      => $this->cartItems(),
-            'cart_empty' => ! (WC()->cart && ! WC()->cart->is_empty()),
+            'items' => $this->cartItems(),
+            'cart_empty' => !(WC()->cart && !WC()->cart->is_empty()),
+            'recs' => $this->recommendations(strategy: 'best_sellers', limit: 4),
+            'recs_heading' => __('Popular choices to get you started', 'woocommerce'),
         ];
     }
 
     protected function cartItems(): array
     {
         $items = [];
-        if (! WC()->cart) {
+        if (!WC()->cart) {
             return $items;
         }
 
         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-            $product   = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+            $product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
             $productId = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
 
-            if (! $product || ! $product->exists() || (int) ($cart_item['quantity'] ?? 0) <= 0) {
+            if (!$product || !$product->exists() || (int) ($cart_item['quantity'] ?? 0) <= 0) {
                 continue;
             }
-            if (! apply_filters('woocommerce_widget_cart_item_visible', true, $cart_item, $cart_item_key)) {
+            if (!apply_filters('woocommerce_widget_cart_item_visible', true, $cart_item, $cart_item_key)) {
                 continue;
             }
 
             // Parent/base title (no variation suffix)
             if ($product->is_type('variation')) {
-                $parent    = wc_get_product($product->get_parent_id());
+                $parent = wc_get_product($product->get_parent_id());
                 $baseTitle = $parent ? $parent->get_name() : $product->get_name();
-                $baseProd  = $parent ?: $product;
+                $baseProd = $parent ?: $product;
             } else {
                 $baseTitle = $product->get_name();
-                $baseProd  = $product;
+                $baseProd = $product;
             }
 
             // Woo fragments
-            $thumbHtml    = apply_filters('woocommerce_cart_item_thumbnail', $product->get_image(), $cart_item, $cart_item_key);
-            $priceHtml    = apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($product), $cart_item, $cart_item_key);
-            $permalink    = apply_filters('woocommerce_cart_item_permalink', $product->is_visible() ? $product->get_permalink($cart_item) : '', $cart_item, $cart_item_key);
+            $thumbHtml = apply_filters('woocommerce_cart_item_thumbnail', $product->get_image(), $cart_item, $cart_item_key);
+            $priceHtml = apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($product), $cart_item, $cart_item_key);
+            $permalink = apply_filters('woocommerce_cart_item_permalink', $product->is_visible() ? $product->get_permalink($cart_item) : '', $cart_item, $cart_item_key);
             $subtotalHtml = apply_filters(
                 'woocommerce_cart_item_subtotal',
                 WC()->cart->get_product_subtotal($product, (int) $cart_item['quantity']),
@@ -64,7 +66,8 @@ class MiniCart extends Composer
             // Helpers
             $pushAttr = static function (array &$list, string $label, $value): void {
                 $label = trim($label);
-                if ($label === '' || $value === null) return;
+                if ($label === '' || $value === null)
+                    return;
 
                 $toHtml = static function ($val): string {
                     if (is_bool($val)) {
@@ -92,7 +95,8 @@ class MiniCart extends Composer
                             array_walk_recursive($val, function ($v) use (&$parts) {
                                 if (is_scalar($v)) {
                                     $s = trim((string) $v);
-                                    if ($s !== '') $parts[] = esc_html($s);
+                                    if ($s !== '')
+                                        $parts[] = esc_html($s);
                                 }
                             });
                         }
@@ -107,7 +111,8 @@ class MiniCart extends Composer
                     }
                     if (is_string($val)) {
                         $s = trim($val);
-                        if ($s === '' || $s === '0' || mb_strtolower($s) === 'none') return '';
+                        if ($s === '' || $s === '0' || mb_strtolower($s) === 'none')
+                            return '';
                         if (filter_var($s, FILTER_VALIDATE_URL)) {
                             $name = basename(parse_url($s, PHP_URL_PATH) ?: $s);
                             return sprintf('<a href="%s" target="_blank" rel="noopener">%s</a>', esc_url($s), esc_html($name));
@@ -118,7 +123,8 @@ class MiniCart extends Composer
                 };
 
                 $html = $toHtml($value);
-                if ($html === '') return;
+                if ($html === '')
+                    return;
 
                 // De-dupe by label+value (label compared case-insensitively)
                 foreach ($list as $row) {
@@ -144,7 +150,7 @@ class MiniCart extends Composer
                         $taxonomyOrName = str_replace('attribute_', '', (string) $attrKey); // 'pa_size' or custom
                         $label = wc_attribute_label($taxonomyOrName, $baseProd);
                         if (taxonomy_exists($taxonomyOrName)) {
-                            $term  = get_term_by('slug', (string) $attrVal, $taxonomyOrName);
+                            $term = get_term_by('slug', (string) $attrVal, $taxonomyOrName);
                             $value = $term ? $term->name : wc_clean(str_replace(['-', '_'], ' ', (string) $attrVal));
                         } else {
                             $value = wc_clean((string) $attrVal);
@@ -160,9 +166,11 @@ class MiniCart extends Composer
                 $rows = [];
             }
             foreach ($rows as $row) {
-                if (!is_array($row) || !empty($row['hidden'])) continue;
+                if (!is_array($row) || !empty($row['hidden']))
+                    continue;
                 $label = isset($row['key']) ? (string) $row['key'] : '';
-                if ($label === '') continue;
+                if ($label === '')
+                    continue;
                 $value = $row['display'] ?? '';
                 $pushAttr($attributes, $label, $value);
             }
@@ -216,7 +224,8 @@ class MiniCart extends Composer
                         return implode(', ', $parts);
                     }
                     $s = trim((string) $val);
-                    if ($s === '' || $s === '0' || mb_strtolower($s) === 'none') return '';
+                    if ($s === '' || $s === '0' || mb_strtolower($s) === 'none')
+                        return '';
                     if (filter_var($s, FILTER_VALIDATE_URL)) {
                         $name = basename(parse_url($s, PHP_URL_PATH) ?: $s);
                         return sprintf('<a href="%s" target="_blank" rel="noopener">%s</a>', esc_url($s), esc_html($name));
@@ -230,9 +239,11 @@ class MiniCart extends Composer
             foreach (['wapf', 'wapf_fields', 'advanced_product_fields'] as $apfKey) {
                 if (!empty($cart_item[$apfKey]) && is_array($cart_item[$apfKey])) {
                     foreach ($cart_item[$apfKey] as $entry) {
-                        if (!is_array($entry)) continue;
+                        if (!is_array($entry))
+                            continue;
                         $label = (string) ($entry['label'] ?? ($entry['name'] ?? ''));
-                        if ($label === '') continue;
+                        if ($label === '')
+                            continue;
                         $valueHtml = $formatApfValue($entry);
                         if ($valueHtml !== '') {
                             $pushAttr($attributes, $label, $valueHtml);
@@ -244,11 +255,14 @@ class MiniCart extends Composer
             // 3b) WooCommerce Product Add-Ons (official) — raw fallback
             if (!empty($cart_item['addons']) && is_array($cart_item['addons'])) {
                 foreach ($cart_item['addons'] as $addon) {
-                    if (!is_array($addon)) continue;
+                    if (!is_array($addon))
+                        continue;
                     $label = (string) ($addon['name'] ?? '');
-                    if ($label === '') continue;
+                    if ($label === '')
+                        continue;
                     $value = $addon['value'] ?? '';
-                    if (is_array($value)) $value = implode(', ', array_map('strval', $value));
+                    if (is_array($value))
+                        $value = implode(', ', array_map('strval', $value));
                     $pushAttr($attributes, $label, $value);
                 }
             }
@@ -256,9 +270,11 @@ class MiniCart extends Composer
             // 3c) TM Extra Product Options
             if (!empty($cart_item['tmcartepo']) && is_array($cart_item['tmcartepo'])) {
                 foreach ($cart_item['tmcartepo'] as $opt) {
-                    if (!is_array($opt)) continue;
+                    if (!is_array($opt))
+                        continue;
                     $label = (string) ($opt['name'] ?? '');
-                    if ($label === '') continue;
+                    if ($label === '')
+                        continue;
                     $value = $opt['value_display'] ?? ($opt['value'] ?? '');
                     $pushAttr($attributes, $label, $value);
                 }
@@ -266,8 +282,13 @@ class MiniCart extends Composer
 
             // 4) Optional whitelisted custom cart item meta
             $whitelist = apply_filters('mini_cart_custom_item_meta_whitelist', [
-                'delivery_date', 'delivery_time', 'message', 'ribbon_color', 'uploaded_image',
-                'acf_delivery_date', 'acf_delivery_time',
+                'delivery_date',
+                'delivery_time',
+                'message',
+                'ribbon_color',
+                'uploaded_image',
+                'acf_delivery_date',
+                'acf_delivery_time',
             ]);
             if (is_array($whitelist)) {
                 foreach ($whitelist as $key) {
@@ -279,28 +300,89 @@ class MiniCart extends Composer
 
             // Build the item payload
             $items[] = [
-                'key'            => $cart_item_key,
-                'class'          => apply_filters('woocommerce_mini_cart_item_class', 'mini_cart_item', $cart_item, $cart_item_key),
+                'key' => $cart_item_key,
+                'class' => apply_filters('woocommerce_mini_cart_item_class', 'mini_cart_item', $cart_item, $cart_item_key),
 
-                'permalink'      => $permalink,
-                'display_title'  => wp_kses_post($baseTitle),
-                'thumb_html'     => $thumbHtml,
-                'price_html'     => $priceHtml,
-                'subtotal_html'  => $subtotalHtml,
-                'attributes'     => $attributes,
-                'qty'            => (int) $cart_item['quantity'],
+                'permalink' => $permalink,
+                'display_title' => wp_kses_post($baseTitle),
+                'thumb_html' => $thumbHtml,
+                'price_html' => $priceHtml,
+                'subtotal_html' => $subtotalHtml,
+                'attributes' => $attributes,
+                'qty' => (int) $cart_item['quantity'],
 
                 'remove' => [
-                    'url'             => esc_url(wc_get_cart_remove_url($cart_item_key)),
-                    'aria_label'      => esc_attr(sprintf(__('Remove %s from cart', 'woocommerce'), wp_strip_all_tags($baseTitle))),
-                    'product_id'      => esc_attr($productId),
-                    'cart_item_key'   => esc_attr($cart_item_key),
-                    'sku'             => esc_attr($product->get_sku()),
+                    'url' => esc_url(wc_get_cart_remove_url($cart_item_key)),
+                    'aria_label' => esc_attr(sprintf(__('Remove %s from cart', 'woocommerce'), wp_strip_all_tags($baseTitle))),
+                    'product_id' => esc_attr($productId),
+                    'cart_item_key' => esc_attr($cart_item_key),
+                    'sku' => esc_attr($product->get_sku()),
                     'success_message' => esc_attr(sprintf(__('&ldquo;%s&rdquo; has been removed from your cart', 'woocommerce'), wp_strip_all_tags($baseTitle))),
                 ],
             ];
         }
 
         return $items;
+    }
+
+
+    /**
+     * Lightweight product recommendations for the mini cart
+     */
+    protected function recommendations(string $strategy = 'featured', int $limit = 4): array
+    {
+        $args = [
+            'status' => 'publish',
+            'limit' => $limit,
+            'return' => 'objects',
+            'type' => ['simple', 'variable'], // keep parents only
+        ];
+
+        if ($strategy === 'best_sellers') {
+            // Order by sales
+            $args['orderby'] = 'popularity'; // uses total_sales internally
+        } else {
+            // Featured
+            $args['featured'] = true;
+            $args['orderby'] = 'date';
+        }
+
+        $products = wc_get_products($args);
+        if (empty($products)) {
+            return [];
+        }
+
+        $items = [];
+        foreach ($products as $product) {
+            if (!$product->is_purchasable() || !$product->is_in_stock()) {
+                continue;
+            }
+
+            $thumb = $product->get_image('woocommerce_thumbnail', ['class' => 'object-cover w-full h-full']);
+            $items[] = [
+                'id' => $product->get_id(),
+                'permalink' => get_permalink($product->get_id()),
+                'title_html' => wp_kses_post($product->get_name()),
+                'thumb_html' => $thumb, // safe from WC
+                'price_html' => wp_kses_post($product->get_price_html()),
+                'type' => $product->get_type(),
+                // Add to cart data (AJAX compatible for simple products)
+                'add' => [
+                    'url' => esc_url($product->add_to_cart_url()),
+                    'text' => esc_html($product->add_to_cart_text()),
+                    'classes' => implode(' ', array_filter([
+                        'button',
+                        'add_to_cart_button',
+                        $product->supports('ajax_add_to_cart') ? 'ajax_add_to_cart' : '',
+                    ])),
+                    'product_id' => (int) $product->get_id(),
+                    'sku' => esc_attr($product->get_sku()),
+                    'quantity' => 1,
+                    'aria' => esc_attr(sprintf(__('Add “%s” to your cart', 'woocommerce'), wp_strip_all_tags($product->get_name()))),
+                ],
+            ];
+        }
+
+        return array_slice($items, 0, $limit);
     }
 }

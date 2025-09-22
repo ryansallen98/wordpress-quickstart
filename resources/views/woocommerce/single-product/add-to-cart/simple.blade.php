@@ -24,6 +24,8 @@
                 do_action('woocommerce_before_add_to_cart_button');
             @endphp
 
+            @php woocommerce_upsell_display(); @endphp
+
             <div class="flex justify-between items-end">
                 <div class="flex flex-col gap-2">
                     <label class="input-label">Quantity</label>
@@ -43,7 +45,7 @@
                 </div>
                 <button type="submit" name="add-to-cart" value="{!! esc_attr($product->get_id()) !!}"
                     class="single_add_to_cart_button button alt{!! esc_attr(wc_wp_theme_get_element_class_name('button') ? ' ' . wc_wp_theme_get_element_class_name('button') : '') !!}">
-            <x-heroicon-s-shopping-bag aria-hidden="true" />+
+                    <x-heroicon-s-shopping-bag aria-hidden="true" />
                     {!! esc_html($product->single_add_to_cart_text()) !!}
                 </button>
 

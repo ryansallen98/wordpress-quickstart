@@ -125,6 +125,8 @@ do_action('woocommerce_before_add_to_cart_form');
 
 	@php $show_add = $quantites_required && $show_add_to_cart_button; @endphp
 
+    @php woocommerce_upsell_display(); @endphp
+
 	@if ($show_add)
 		@php do_action('woocommerce_before_add_to_cart_button'); @endphp
 

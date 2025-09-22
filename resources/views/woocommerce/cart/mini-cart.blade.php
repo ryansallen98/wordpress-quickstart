@@ -94,7 +94,49 @@
         @php do_action('woocommerce_widget_shopping_cart_after_buttons'); @endphp
     </div>
 @else
-    <p class="woocommerce-mini-cart__empty-message">{{ esc_html__('No products in the cart.', 'woocommerce') }}</p>
+    <div class="p-4">
+        <div
+            class="woocommerce-mini-cart__empty-message flex flex-col items-center justify-center text-center p-8 rounded-md border border-dashed border-muted-foreground/20 bg-muted/40">
+            <div class="mb-3 text-muted-foreground">
+                <x-lucide-shopping-cart class="size-12" />
+            </div>
+            <p class="text-sm font-medium text-muted-foreground">
+                {{ __('Your cart is currently empty.', 'woocommerce') }}
+            </p>
+            <a href="{{ wc_get_page_permalink('shop') }}" class="btn btn-primary mt-4">
+                <x-lucide-store />
+                {{ __('Browse products', 'woocommerce') }}
+            </a>
+        </div>
+    </div>
+    @if (!empty($recs))
+        <div class="mt-6">
+            <div class="px-4">
+                <h3 class="text-sm font-semibold mb-3">{{ $recs_heading }}</h3>
+            </div>
+
+            {{-- Same look/feel as mini-cart items --}}
+            <ul class="woocommerce-mini-cart cart_list product_list_widget flex flex-col">
+                @foreach ($recs as $p)
+                    <li class="flex text-sm border-b last:border-b-0 border-dashed">
+                        <a href="{{ esc_url($p['permalink']) }}"
+                            class="no-underline! flex w-full hover:bg-accent/50 p-4 rounded-md">
+                            <div class="w-16 h-16 flex-shrink-0 rounded-md overflow-hidden shadow">
+                                {!! $p['thumb_html'] !!}
+                            </div>
+
+                            <div class="min-w-0 ml-4">
+                                <div class="truncate">
+                                    {!! $p['title_html'] !!}
+                                </div>
+                                <p class="text-xs text-muted-foreground mt-1">{!! $p['price_html'] !!}</p>
+                            </div>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 @endif
 
 @php do_action('woocommerce_after_mini_cart'); @endphp

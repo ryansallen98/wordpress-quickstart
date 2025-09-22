@@ -27,8 +27,10 @@
 
     @php do_action('woocommerce_before_add_to_cart_button'); @endphp
 
-    <div class="woocommerce-variation single_variation text-right text-2xl font-semibold [&_.price]:inline-flex [&_.price]:mt-4" role="alert"
-        aria-relevant="additions">
+    @php woocommerce_upsell_display(); @endphp
+
+    <div class="woocommerce-variation single_variation text-right text-2xl font-semibold [&_.price]:inline-flex [&_.price]:mt-4"
+        role="alert" aria-relevant="additions">
     </div>
 
     <div class="flex justify-between items-end">

@@ -9,6 +9,8 @@
 <form class="cart mt-4 mb-4" action="{!! esc_url($product_url) !!}" method="get">
     @php do_action('woocommerce_before_add_to_cart_button'); @endphp
 
+    @php woocommerce_upsell_display(); @endphp
+
     <button type="submit"
         class="single_add_to_cart_button button alt{!! esc_attr(wc_wp_theme_get_element_class_name('button') ? ' ' . wc_wp_theme_get_element_class_name('button') : '') !!}">
 
