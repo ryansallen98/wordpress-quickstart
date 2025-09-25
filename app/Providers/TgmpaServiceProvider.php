@@ -22,13 +22,13 @@ class TgmpaServiceProvider extends SageServiceProvider
     {
         $plugins = [
             [
-                'name'     => 'Secure Custom Fields',
-                'slug'     => 'secure-custom-fields',
+                'name'     => 'Advanced Custom Fields PRO',
+                'slug'     => 'advanced-custom-fields-pro',
                 'required' => true,
             ],
             [
-                'name'     => 'ACF Extended',
-                'slug'     => 'acf-extended',
+                'name'     => 'ACF Extended Pro',
+                'slug'     => 'acf-extended-pro',
                 'required' => true,
             ],
             [
@@ -41,15 +41,10 @@ class TgmpaServiceProvider extends SageServiceProvider
                 'slug'     => 'acf-content-analysis-for-yoast-seo',
                 'required' => false,
             ],
-            [
-                'name'     => 'Advanced Editor Tools (TinyMCE Advanced)',
-                'slug'     => 'tinymce-advanced',
-                'required' => false,
-            ],
         ];
 
         $config = [
-            'id'           => 'theme_name',
+            'id'           => 'wordpress-quickstart',
             'menu'         => 'tgmpa-install-plugins',
             'has_notices'  => true,
             'dismissable'  => false,
