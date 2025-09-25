@@ -36,6 +36,9 @@ Application::configure()
         App\Providers\ThemeServiceProvider::class,
         App\Providers\TgmpaServiceProvider::class,
 
+        // Advanced Custom Fields
+        App\Providers\AcfServiceProvider::class,
+
         // WooCommerce
         App\Providers\WooCommerceServiceProvider::class,
         App\Providers\WooCommerceProductSearchServiceProvider::class,
@@ -54,7 +57,7 @@ Application::configure()
 |
 */
 
-collect(['setup', 'filters', 'acf'])
+collect(['setup', 'filters'])
     ->each(function ($file) {
         if (!locate_template($file = "app/{$file}.php", true, true)) {
             wp_die(
