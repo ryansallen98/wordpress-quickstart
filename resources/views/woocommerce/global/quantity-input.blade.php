@@ -19,7 +19,7 @@
       min: {{ json_encode($min_value) }},
       max: {{ json_encode($max_value) }},   // 0 or '' means no max
       step: {{ json_encode($step ?: '1') }}
-    })" class="flex shadow-sm rounded-md">
+    })" class="flex shadow-sm rounded-md w-fit">
     <button class="btn btn-outline btn-icon rounded-r-none shadow-none! !border-r-0" type="button" x-on:click="dec()"
       x-bind:disabled="decDisabled" x-bind:aria-disabled="decDisabled ? 'true' : 'false'">
       <x-lucide-minus />
