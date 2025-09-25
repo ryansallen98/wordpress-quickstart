@@ -7,6 +7,6 @@
   );
 @endphp
 
-<div class="overflow-hidden z-1 w-full rounded-lg shadow-md">
+<div class="overflow-hidden z-1 w-full rounded-lg shadow-md bg-gradient-to-t from-stone-100 dark:from-accent to-bg-background dark:to-accent/50">
   {!! $image !!}
 </div>

@@ -12,7 +12,7 @@
                                 <figure class="absolute inset-0 !mb-0" data-large_image="{{ $primary['data']['large_image'] }}"
                                     data-large_image_width="{{ $primary['data']['large_image_width'] }}"
                                     data-large_image_height="{{ $primary['data']['large_image_height'] }}">
-                                    <img class="wp-post-image js-wc-main-image block absolute inset-0 w-full h-full object-cover object-center"
+                                    <img class="wp-post-image js-wc-main-image block absolute inset-0 w-full h-full object-cover object-center bg-gradient-to-t from-stone-100 dark:from-accent to-bg-background dark:to-accent/50"
                                         src="{{ $primary['src'] }}" width="{{ $primary['width'] }}"
                                         height="{{ $primary['height'] }}" alt="{{ $primary['alt'] }}" @if($primary['srcset'])
                                         srcset="{{ $primary['srcset'] }}" @endif @if($primary['sizes'])
