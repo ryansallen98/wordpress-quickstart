@@ -22,9 +22,38 @@ the readme will list any important changes.
     do_action('woocommerce_before_main_content');
   @endphp
 
-  <header class="woocommerce-products-header">
+  @php
+    // Get current queried object (category or shop page)
+    $qo = get_queried_object();
+    $bg = null;
+
+    // Category archive background
+    if ($qo instanceof WP_Term && $qo->taxonomy === 'product_cat') {
+      $bg = get_field('background', 'product_cat_' . $qo->term_id);
+    }
+
+    // Shop page background
+    if (!$bg && function_exists('is_shop') && is_shop()) {
+      $shop_page_id = get_option('woocommerce_shop_page_id');
+      $bg = $shop_page_id ? get_field('background', $shop_page_id) : null;
+    }
+
+    // Normalize background into a URL
+    if (is_array($bg) && !empty($bg['url'])) {
+      $bg_url = esc_url($bg['url']);
+    } elseif (is_numeric($bg)) {
+      $bg_url = esc_url(wp_get_attachment_url($bg));
+    } elseif (is_string($bg)) {
+      $bg_url = esc_url($bg);
+    } else {
+      $bg_url = null;
+    }
+  @endphp
+
+  <header class="woocommerce-products-header bg-primary @if (!$bg_url) text-primary-foreground @else text-foreground dark:text-background @endif p-8 pt-24 rounded-lg shadow-lg my-4" @if ($bg_url) style="background-image: url('{{ $bg_url }}'); background-size: cover; background-position: center;" @endif>
     @if (apply_filters('woocommerce_show_page_title', true))
-      <h1 class="text-2xl font-bold mb-4">{!! woocommerce_page_title(false) !!}</h1>
+      <h1 class="text-3xl font-bold mb-1">{!! woocommerce_page_title(false) !!}</h1>
+      <p class="text-lg">Browse our delicious selection of sweets</p>
     @endif
 
     @php
